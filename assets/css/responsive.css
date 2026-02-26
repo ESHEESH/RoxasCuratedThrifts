@@ -1,0 +1,130 @@
+/**
+ * Responsive Stylesheet
+ * 
+ * Media queries for responsive design across devices.
+ * 
+ * @author Thrift Store Team
+ * @version 1.0
+ */
+
+/* =====================================================
+   TABLET (768px and up)
+   ===================================================== */
+@media (min-width: 768px) {
+    /* Navigation */
+    .main-nav {
+        display: block;
+    }
+    
+    .menu-toggle {
+        display: none;
+    }
+    
+    /* Hero */
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    .hero-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    /* Categories */
+    .categories-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Products */
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =====================================================
+   DESKTOP (1024px and up)
+   ===================================================== */
+@media (min-width: 1024px) {
+    /* Container */
+    :root {
+        --container-padding: 2rem;
+    }
+    
+    /* Hero */
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    /* Products */
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+    
+    /* Admin */
+    .admin-sidebar {
+        transform: none;
+    }
+    
+    .admin-sidebar-overlay {
+        display: none;
+    }
+    
+    .sidebar-toggle {
+        display: none;
+    }
+    
+    .admin-main {
+        margin-left: 260px;
+    }
+}
+
+/* =====================================================
+   LARGE DESKTOP (1400px and up)
+   ===================================================== */
+@media (min-width: 1400px) {
+    .hero-title {
+        font-size: 4.5rem;
+    }
+}
+
+/* =====================================================
+   MOBILE LANDSCAPE
+   ===================================================== */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: auto;
+        padding: 4rem 0;
+    }
+    
+    .scroll-indicator {
+        display: none;
+    }
+}
+
+/* =====================================================
+   HERO SECTION FIXES - Ensures no circular artifacts
+   ===================================================== */
+.hero,
+.hero-background,
+.hero-overlay,
+.hero-content {
+    border-radius: 0 !important;
+}
+
+.hero-background::before,
+.hero-background::after,
+.hero-overlay::before,
+.hero-overlay::after {
+    display: none !important;
+    content: none !important;
+}
