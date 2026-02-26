@@ -507,46 +507,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         // Size groups for color selection
         const sizeGroups = <?php echo json_encode($sizeGroups); ?>;
         
-        // Debug: Log variants to console
-        console.log('Product variants:', variants);
-        console.log('Size groups:', sizeGroups);
-        console.log('Total variants:', variants.length);
-        
-        // If there's only one variant, auto-select it
-        if (variants.length === 1 && variants[0].stock_quantity > 0) {
-            document.addEventListener('DOMContentLoaded', function() {
-                const variantIdInput = document.getElementById('variantId');
-                const addToCartBtn = document.getElementById('addToCartBtn');
-                
-                if (variantIdInput && addToCartBtn) {
-                    variantIdInput.value = variants[0].variant_id;
-                    addToCartBtn.disabled = false;
-                    console.log('Auto-selected single variant:', variants[0].variant_id);
-                    
-                    // Update button text to show it's ready
-                    const helpText = document.querySelector('.product-actions p');
-                    if (helpText) {
-                        helpText.textContent = 'Ready to add to cart!';
-                        helpText.style.color = '#4CAF50';
-                    }
-                }
-            });
-        }
-        
-        // Add click handler to test button state
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartBtn = document.getElementById('addToCartBtn');
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', function(e) {
-                    if (this.disabled) {
-                        e.preventDefault();
-                        alert('Please select a size and color first');
-                        console.log('Button is disabled. Variant ID:', document.getElementById('variantId')?.value);
-                    }
-                });
-            }
-        });
-        
         // Gallery Navigation
         if (typeof allImages !== 'undefined' && allImages.length > 3) {
             let currentSet = 0;
