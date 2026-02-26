@@ -95,7 +95,7 @@ $sql = "SELECT p.*, pi.image_path as primary_image
         LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = TRUE
         WHERE p.category_id = ? AND p.product_id != ? AND p.is_active = TRUE
         ORDER BY RAND()
-        LIMIT 4";
+        LIMIT 8";
 $relatedProducts = fetchAll($sql, [$product['category_id'], $product['product_id']]);
 
 // Increment view count
@@ -191,23 +191,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </nav>
             
             <div class="product-detail-layout">
-                <!-- Image Gallery - Grid Layout -->
-                <div class="product-gallery">
+                <!-- Image Gallery - Grid Layout with Carousel -->
+                <div class="product-gallery-wrapper">
                     <?php if (!empty($images)): ?>
-                        <?php foreach ($images as $index => $image): ?>
-                            <div class="gallery-image">
-                                <img src="assets/images/products/<?php echo cleanOutput($image['image_path']); ?>" 
-                                     alt="<?php echo cleanOutput($product['name']); ?> - View <?php echo $index + 1; ?>">
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="gallery-image">
-                            <div class="product-placeholder large">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                    <polyline points="21 15 16 10 5 21"></polyline>
+                        <?php $totalImages = count($images); ?>
+                        <?php $hasMultipleSets = $totalImages > 3; ?>
+                        
+                        <div class="product-gallery" id="productGallery">
+                            <?php 
+                            // Show only first 3 images initially
+                            for ($i = 0; $i < min(3, $totalImages); $i++): 
+                                $image = $images[$i];
+                            ?>
+                                <div class="gallery-image">
+                                    <img src="assets/images/products/<?php echo cleanOutput($image['image_path']); ?>" 
+                                         alt="<?php echo cleanOutput($product['name']); ?> - View <?php echo $i + 1; ?>">
+                                </div>
+                            <?php endfor; ?>
+                        </div>
+                        
+                        <?php if ($hasMultipleSets): ?>
+                            <!-- Navigation Arrows -->
+                            <button class="gallery-nav gallery-nav-prev" id="galleryPrev" aria-label="Previous images">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M15 18l-6-6 6-6"></path>
                                 </svg>
+                            </button>
+                            <button class="gallery-nav gallery-nav-next" id="galleryNext" aria-label="Next images">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 18l6-6-6-6"></path>
+                                </svg>
+                            </button>
+                            
+                            <!-- Hidden images data for JavaScript -->
+                            <script>
+                                const allImages = <?php echo json_encode(array_map(function($img) use ($product) {
+                                    return [
+                                        'path' => $img['image_path'],
+                                        'alt' => $product['name']
+                                    ];
+                                }, $images)); ?>;
+                            </script>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div class="product-gallery">
+                            <div class="gallery-image">
+                                <div class="product-placeholder large">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -215,8 +250,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 
                 <!-- Product Info -->
                 <div class="product-info-panel">
-                    <div class="product-header">
-                        <span class="product-category"><?php echo cleanOutput($product['category_name']); ?></span>
                     <div class="product-header">
                         <span class="product-category"><?php echo cleanOutput($product['category_name']); ?></span>
                         <h1 class="product-title"><?php echo cleanOutput($product['name']); ?></h1>
@@ -244,6 +277,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <span class="condition-badge condition-<?php echo $product['condition_status']; ?>">
                             <?php echo ucwords(str_replace('_', ' ', $product['condition_status'])); ?>
                         </span>
+                        <?php if (!empty($product['gender'])): ?>
+                            <span class="gender-badge gender-<?php echo $product['gender']; ?>">
+                                <?php echo ucfirst($product['gender']); ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
                     
                     <!-- Variant Selection -->
@@ -318,9 +356,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                            class="btn btn-outline btn-lg" 
                                            style="padding: 0.75rem 1rem;"
                                            title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>">
-                                            <?php echo $inWishlist ? '❤️' : '🤍'; ?>
+                                            <svg viewBox="0 0 24 24" fill="<?php echo $inWishlist ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                                <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                                            </svg>
                                         </a>
                                     </div>
+                                    <p style="font-size: 0.875rem; color: #666; text-align: center;">Select size and color to add to cart</p>
                                 <?php else: ?>
                                     <div style="background: #f8f8f8; border-radius: 12px; padding: 1.5rem; text-align: center;">
                                         <p style="margin-bottom: 1rem; color: #666;">Sign in to add items to your cart</p>
@@ -383,8 +424,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <!-- Related Products -->
             <?php if (!empty($relatedProducts)): ?>
                 <section class="related-products">
+                    <div class="section-separator"></div>
                     <h2 class="section-title">You May Also Like</h2>
-                    <div class="products-grid small">
+                    <div class="products-grid">
                         <?php foreach ($relatedProducts as $related): ?>
                             <article class="product-card">
                                 <a href="product-detail.php?slug=<?php echo $related['slug']; ?>" class="product-link">
@@ -402,11 +444,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                                 </svg>
                                             </div>
                                         <?php endif; ?>
+                                        
+                                        <!-- Condition Badge -->
+                                        <span class="condition-badge condition-<?php echo $related['condition_status']; ?>">
+                                            <?php echo ucwords(str_replace('_', ' ', $related['condition_status'])); ?>
+                                        </span>
                                     </div>
+                                    
                                     <div class="product-info">
-                                        <h3 class="product-name"><?php echo cleanOutput($related['name']); ?></h3>
+                                        <span class="product-category"><?php echo cleanOutput($product['category_name']); ?></span>
+                                        <h3 class="product-name">
+                                            <span><?php echo cleanOutput($related['name']); ?></span>
+                                            
+                                            <!-- Wishlist Heart Button -->
+                                            <?php if (isLoggedIn()): ?>
+                                                <?php
+                                                $userId = getCurrentUserId();
+                                                $inWishlist = fetchOne("SELECT wishlist_id FROM wishlist WHERE user_id = ? AND product_id = ?", 
+                                                    [$userId, $related['product_id']]);
+                                                ?>
+                                                <a href="<?php echo $inWishlist ? 'wishlist.php?remove=' . $inWishlist['wishlist_id'] : 'wishlist-add.php?product_id=' . $related['product_id']; ?>" 
+                                                   class="wishlist-btn <?php echo $inWishlist ? 'active' : ''; ?>" 
+                                                   title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>">
+                                                    <svg viewBox="0 0 24 24" fill="<?php echo $inWishlist ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="2">
+                                                        <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                                                    </svg>
+                                                </a>
+                                            <?php else: ?>
+                                                <a href="login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $related['slug']); ?>" 
+                                                   class="wishlist-btn" 
+                                                   title="Sign in to add to wishlist">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                                                    </svg>
+                                                </a>
+                                            <?php endif; ?>
+                                        </h3>
+                                        
                                         <div class="product-price">
                                             <span class="current-price"><?php echo formatPrice($related['base_price']); ?></span>
+                                            <?php if ($related['original_price']): ?>
+                                                <span class="original-price"><?php echo formatPrice($related['original_price']); ?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </a>
@@ -427,6 +506,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         
         // Size groups for color selection
         const sizeGroups = <?php echo json_encode($sizeGroups); ?>;
+        
+        // Debug: Log variants to console
+        console.log('Product variants:', variants);
+        console.log('Size groups:', sizeGroups);
+        console.log('Total variants:', variants.length);
+        
+        // If there's only one variant, auto-select it
+        if (variants.length === 1 && variants[0].stock_quantity > 0) {
+            document.addEventListener('DOMContentLoaded', function() {
+                const variantIdInput = document.getElementById('variantId');
+                const addToCartBtn = document.getElementById('addToCartBtn');
+                
+                if (variantIdInput && addToCartBtn) {
+                    variantIdInput.value = variants[0].variant_id;
+                    addToCartBtn.disabled = false;
+                    console.log('Auto-selected single variant:', variants[0].variant_id);
+                    
+                    // Update button text to show it's ready
+                    const helpText = document.querySelector('.product-actions p');
+                    if (helpText) {
+                        helpText.textContent = 'Ready to add to cart!';
+                        helpText.style.color = '#4CAF50';
+                    }
+                }
+            });
+        }
+        
+        // Add click handler to test button state
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', function(e) {
+                    if (this.disabled) {
+                        e.preventDefault();
+                        alert('Please select a size and color first');
+                        console.log('Button is disabled. Variant ID:', document.getElementById('variantId')?.value);
+                    }
+                });
+            }
+        });
+        
+        // Gallery Navigation
+        if (typeof allImages !== 'undefined' && allImages.length > 3) {
+            let currentSet = 0;
+            const totalSets = Math.ceil(allImages.length / 3);
+            const gallery = document.getElementById('productGallery');
+            const prevBtn = document.getElementById('galleryPrev');
+            const nextBtn = document.getElementById('galleryNext');
+            
+            function updateGallery() {
+                const startIndex = currentSet * 3;
+                const endIndex = Math.min(startIndex + 3, allImages.length);
+                const imagesToShow = allImages.slice(startIndex, endIndex);
+                
+                // Clear gallery
+                gallery.innerHTML = '';
+                
+                // Add images
+                imagesToShow.forEach((img, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'gallery-image';
+                    div.innerHTML = `<img src="assets/images/products/${img.path}" alt="${img.alt} - View ${startIndex + index + 1}">`;
+                    gallery.appendChild(div);
+                });
+                
+                // Update button states
+                prevBtn.disabled = currentSet === 0;
+                nextBtn.disabled = currentSet === totalSets - 1;
+            }
+            
+            prevBtn.addEventListener('click', () => {
+                if (currentSet > 0) {
+                    currentSet--;
+                    updateGallery();
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentSet < totalSets - 1) {
+                    currentSet++;
+                    updateGallery();
+                }
+            });
+            
+            // Initialize
+            updateGallery();
+        }
         
         // Accordion functionality
         document.querySelectorAll('.accordion-header').forEach(header => {

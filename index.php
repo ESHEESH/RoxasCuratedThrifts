@@ -60,22 +60,27 @@ $flash = getFlashMessage();
         </div>
     <?php endif; ?>
     
-    <!-- Hero Section with View Toggle -->
+    <!-- Hero Section with Gender Navigation -->
     <section class="hero">
         <div class="hero-background">
             <div class="hero-overlay"></div>
         </div>
         
         <div class="hero-content">
-            <!-- View Mode Toggle -->
-            <div class="view-toggle">
-                <a href="?view=shop" class="view-btn <?php echo $viewMode === 'shop' ? 'active' : ''; ?>" data-view="shop">
-                    <span class="view-label">Shop Me</span>
-                </a>
-                <span class="toggle-divider">/</span>
-                <a href="?view=girls" class="view-btn <?php echo $viewMode === 'girls' ? 'active' : ''; ?>" data-view="girls">
-                    <span class="view-label">Girls</span>
-                </a>
+            <!-- Gender Navigation Pyramid -->
+            <div class="gender-nav-pyramid">
+                <div class="pyramid-top">
+                    <span class="shop-me-label">SHOP ME</span>
+                </div>
+                <div class="pyramid-bottom">
+                    <a href="products.php?gender=male" class="gender-btn boys-btn">
+                        <span>BOYS</span>
+                    </a>
+                    <span class="gender-divider">|</span>
+                    <a href="products.php?gender=female" class="gender-btn girls-btn">
+                        <span>GIRLS</span>
+                    </a>
+                </div>
             </div>
             
             <h1 class="hero-title">

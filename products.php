@@ -3,9 +3,6 @@
  * Products Listing Page
  * 
  * Displays all products with filtering and sorting options.
- * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/includes/functions.php';
@@ -15,6 +12,7 @@ $categorySlug = $_GET['category'] ?? '';
 $searchQuery = sanitizeInput($_GET['search'] ?? '');
 $sortBy = in_array($_GET['sort'] ?? '', ['newest', 'price_low', 'price_high', 'name']) ? $_GET['sort'] : 'newest';
 $condition = $_GET['condition'] ?? '';
+$gender = $_GET['gender'] ?? '';
 $minPrice = isset($_GET['min_price']) ? (float)$_GET['min_price'] : null;
 $maxPrice = isset($_GET['max_price']) ? (float)$_GET['max_price'] : null;
 
@@ -43,6 +41,11 @@ if ($searchQuery) {
 if ($condition && in_array($condition, ['new', 'like_new', 'good', 'fair'])) {
     $whereConditions[] = 'p.condition_status = ?';
     $params[] = $condition;
+}
+
+if ($gender && in_array($gender, ['male', 'female', 'unisex'])) {
+    $whereConditions[] = 'p.gender = ?';
+    $params[] = $gender;
 }
 
 if ($minPrice !== null) {
@@ -197,6 +200,27 @@ $pageTitle = $currentCategory ? $currentCategory['name'] : ($searchQuery ? 'Sear
                                     <li>
                                         <label class="filter-option">
                                             <input type="radio" name="condition" value="<?php echo $value; ?>" <?php echo $condition === $value ? 'checked' : ''; ?>>
+                                            <span><?php echo $label; ?></span>
+                                        </label>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        
+                        <!-- Gender -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">Gender</h4>
+                            <ul class="filter-list">
+                                <li>
+                                    <label class="filter-option">
+                                        <input type="radio" name="gender" value="" <?php echo empty($gender) ? 'checked' : ''; ?>>
+                                        <span>All</span>
+                                    </label>
+                                </li>
+                                <?php foreach (['male' => 'Male', 'female' => 'Female', 'unisex' => 'Unisex'] as $value => $label): ?>
+                                    <li>
+                                        <label class="filter-option">
+                                            <input type="radio" name="gender" value="<?php echo $value; ?>" <?php echo ($gender ?? '') === $value ? 'checked' : ''; ?>>
                                             <span><?php echo $label; ?></span>
                                         </label>
                                     </li>

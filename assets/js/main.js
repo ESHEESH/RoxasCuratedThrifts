@@ -188,27 +188,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // =====================================================
-    // LAZY LOADING IMAGES
+    // PRODUCT CARDS SCROLL ANIMATION
     // =====================================================
     
     if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        img.removeAttribute('data-src');
-                    }
-                    observer.unobserve(img);
-                }
-            });
+        // Add lazy-load class to all product cards
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.classList.add('lazy-load');
         });
         
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
+        // Animate product cards on scroll
+        const cardObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of the card is visible
+            rootMargin: '0px 0px -50px 0px' // Trigger slightly before entering viewport
+        });
+        
+        // Observe all product cards
+        document.querySelectorAll('.product-card').forEach(card => {
+            cardObserver.observe(card);
         });
     }
+    // If IntersectionObserver is not supported, cards remain visible (no lazy-load class added)
     
 });
 

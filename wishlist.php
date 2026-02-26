@@ -3,9 +3,6 @@
  * User Wishlist Page
  * 
  * Displays user's saved/wishlisted products.
- * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/includes/functions.php';
@@ -140,10 +137,6 @@ $flash = getFlashMessage();
         .profile-menu a.active {
             background: #f5f5f5;
             color: #1a1a1a;
-        }
-        
-        .profile-menu .icon {
-            font-size: 1.25rem;
         }
         
         .profile-content {
@@ -304,10 +297,41 @@ $flash = getFlashMessage();
                 <div class="profile-email"><?php echo cleanOutput($user['email']); ?></div>
                 
                 <ul class="profile-menu">
-                    <li><a href="profile.php"><span class="icon">👤</span> Profile</a></li>
-                    <li><a href="orders.php"><span class="icon">📦</span> My Orders</a></li>
-                    <li><a href="wishlist.php" class="active"><span class="icon">❤️</span> Wishlist</a></li>
-                    <li><a href="logout.php"><span class="icon">🚪</span> Logout</a></li>
+                    <li>
+                        <a href="profile.php">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="orders.php">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            </svg>
+                            My Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="wishlist.php" class="active">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                            </svg>
+                            Wishlist
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.php">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Logout
+                        </a>
+                    </li>
                 </ul>
             </aside>
             
@@ -319,7 +343,9 @@ $flash = getFlashMessage();
                 
                 <?php if (empty($wishlistItems)): ?>
                     <div class="empty-wishlist">
-                        <div class="icon">❤️</div>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 64px; height: 64px; margin: 0 auto 1rem;">
+                            <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                        </svg>
                         <h3>Your wishlist is empty</h3>
                         <p>Save items you love to your wishlist and find them easily later!</p>
                         <a href="products.php" class="btn btn-primary">Start Shopping</a>

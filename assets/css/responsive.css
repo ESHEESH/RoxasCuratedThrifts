@@ -1,11 +1,4 @@
-/**
- * Responsive Stylesheet
- * 
- * Media queries for responsive design across devices.
- * 
- * @author Thrift Store Team
- * @version 1.0
- */
+
 
 /* =====================================================
    TABLET (768px and up)
@@ -41,8 +34,13 @@
     }
     
     /* Footer */
-    .footer-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
+    }
+    
+    .footer-links {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -66,8 +64,8 @@
     }
     
     /* Footer */
-    .footer-grid {
-        grid-template-columns: 2fr 1fr 1fr 1fr;
+    .footer-main {
+        grid-template-columns: 1.5fr 2fr;
     }
     
     /* Admin */
@@ -127,4 +125,25 @@
 .hero-overlay::after {
     display: none !important;
     content: none !important;
+}
+
+/* =====================================================
+   MOBILE (below 768px)
+   ===================================================== */
+@media (max-width: 767px) {
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+    }
+    
+    .footer-links {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .payment-methods {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
 }

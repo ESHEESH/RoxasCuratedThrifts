@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoryId = (int)($_POST['category_id'] ?? 0);
     $basePrice = (float)($_POST['base_price'] ?? 0);
     $condition = $_POST['condition_status'] ?? 'good';
+    $gender = $_POST['gender'] ?? 'unisex';
     $brand = trim($_POST['brand'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
@@ -56,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($name)) $errors[] = 'Product name is required';
     if ($categoryId === 0) $errors[] = 'Category is required';
     if ($basePrice <= 0) $errors[] = 'Valid base price is required';
+    if (!in_array($gender, ['male', 'female', 'unisex'])) $errors[] = 'Valid gender is required';
     
     if (empty($errors)) {
         // Store old values for logging
@@ -64,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'category_id' => $product['category_id'],
             'base_price' => $product['base_price'],
             'condition_status' => $product['condition_status'],
+            'gender' => $product['gender'],
             'brand' => $product['brand'],
             'description' => $product['description'],
             'is_featured' => $product['is_featured'],
@@ -74,9 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         executeQuery(
             "UPDATE products SET 
                 name = ?, category_id = ?, base_price = ?, condition_status = ?, 
-                brand = ?, description = ?, is_featured = ?, is_active = ? 
+                gender = ?, brand = ?, description = ?, is_featured = ?, is_active = ? 
              WHERE product_id = ?",
-            [$name, $categoryId, $basePrice, $condition, $brand, $description, $isFeatured, $isActive, $productId]
+            [$name, $categoryId, $basePrice, $condition, $gender, $brand, $description, $isFeatured, $isActive, $productId]
         );
         
         // Update variants
@@ -244,6 +247,15 @@ $flash = getFlashMessage();
                                 <option value="excellent" <?php echo $product['condition_status'] === 'excellent' ? 'selected' : ''; ?>>Excellent</option>
                                 <option value="good" <?php echo $product['condition_status'] === 'good' ? 'selected' : ''; ?>>Good</option>
                                 <option value="fair" <?php echo $product['condition_status'] === 'fair' ? 'selected' : ''; ?>>Fair</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="male" <?php echo ($product['gender'] ?? '') === 'male' ? 'selected' : ''; ?>>Male</option>
+                                <option value="female" <?php echo ($product['gender'] ?? '') === 'female' ? 'selected' : ''; ?>>Female</option>
+                                <option value="unisex" <?php echo ($product['gender'] ?? '') === 'unisex' ? 'selected' : ''; ?>>Unisex</option>
                             </select>
                         </div>
                         

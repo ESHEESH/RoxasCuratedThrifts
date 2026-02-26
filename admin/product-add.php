@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $name = sanitizeInput($_POST['name'] ?? '');
         $categoryId = (int)($_POST['category_id'] ?? 0);
+        $gender = $_POST['gender'] ?? 'unisex';
         $description = sanitizeInput($_POST['description'] ?? '');
         $basePrice = (float)($_POST['base_price'] ?? 0);
         $originalPrice = !empty($_POST['original_price']) ? (float)$_POST['original_price'] : null;
@@ -40,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($categoryId <= 0) {
             $errors[] = "Please select a category.";
+        }
+        
+        if (empty($gender) || !in_array($gender, ['male', 'female', 'unisex'])) {
+            $errors[] = "Please select a valid gender.";
         }
         
         if ($basePrice <= 0) {
@@ -61,13 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 beginTransaction();
                 
                 // Insert product
-                $sql = "INSERT INTO products (category_id, name, slug, description, base_price, original_price, condition_status, brand, is_featured, sku) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO products (category_id, gender, name, slug, description, base_price, original_price, condition_status, brand, is_featured, sku) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $sku = 'SKU-' . strtoupper(substr(uniqid(), -6));
                 
                 executeQuery($sql, [
                     $categoryId,
+                    $gender,
                     $name,
                     $slug,
                     $description,
@@ -339,6 +345,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php foreach ($categories as $cat): ?>
                                     <option value="<?php echo $cat['category_id']; ?>"><?php echo cleanOutput($cat['name']); ?></option>
                                 <?php endforeach; ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="unisex" selected>Unisex</option>
                             </select>
                         </div>
                         

@@ -4,8 +4,6 @@
  * 
  * Shows sales statistics, charts, and analytics.
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/../includes/functions.php';
@@ -279,22 +277,46 @@ foreach ($dailySales as $day) {
             <!-- Stats Overview -->
             <div class="stats-overview">
                 <div class="stat-card-large">
-                    <div class="stat-icon" style="background: #e3f2fd;">💰</div>
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1976d2" stroke-width="2" style="width: 24px; height: 24px;">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
                     <div class="stat-value"><?php echo formatPrice($salesStats['total_revenue'] ?? 0); ?></div>
                     <div class="stat-label">Total Revenue</div>
                 </div>
                 <div class="stat-card-large">
-                    <div class="stat-icon" style="background: #e8f5e9;">📦</div>
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#388e3c" stroke-width="2" style="width: 24px; height: 24px;">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
                     <div class="stat-value"><?php echo number_format($salesStats['total_orders'] ?? 0); ?></div>
                     <div class="stat-label">Total Orders</div>
                 </div>
                 <div class="stat-card-large">
-                    <div class="stat-icon" style="background: #fff3e0;">📊</div>
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#f57c00" stroke-width="2" style="width: 24px; height: 24px;">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
                     <div class="stat-value"><?php echo formatPrice($salesStats['avg_order_value'] ?? 0); ?></div>
                     <div class="stat-label">Avg Order Value</div>
                 </div>
                 <div class="stat-card-large">
-                    <div class="stat-icon" style="background: #f3e5f5;">👥</div>
+                    <div class="stat-icon" style="background: #f3e5f5;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#7b1fa2" stroke-width="2" style="width: 24px; height: 24px;">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
                     <div class="stat-value"><?php echo number_format($customerStats['unique_customers'] ?? 0); ?></div>
                     <div class="stat-label">Unique Customers</div>
                 </div>

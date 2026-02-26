@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
 $search = $_GET['search'] ?? '';
 $categoryFilter = $_GET['category'] ?? '';
 $stockFilter = $_GET['stock'] ?? '';
+$genderFilter = $_GET['gender'] ?? '';
 $statusFilter = $_GET['status'] ?? 'active'; // Default to showing only active products
 $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 20;
@@ -76,6 +77,11 @@ if ($search) {
 if ($categoryFilter) {
     $whereConditions[] = 'p.category_id = ?';
     $params[] = $categoryFilter;
+}
+
+if ($genderFilter && in_array($genderFilter, ['male', 'female', 'unisex'])) {
+    $whereConditions[] = 'p.gender = ?';
+    $params[] = $genderFilter;
 }
 
 if ($stockFilter === 'low') {
@@ -185,6 +191,15 @@ $adminId = getCurrentAdminId();
                             <option value="">All Stock</option>
                             <option value="low" <?php echo $stockFilter === 'low' ? 'selected' : ''; ?>>Low Stock (≤5)</option>
                             <option value="out" <?php echo $stockFilter === 'out' ? 'selected' : ''; ?>>Out of Stock</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select name="gender" class="filter-select">
+                            <option value="">All Genders</option>
+                            <option value="male" <?php echo $genderFilter === 'male' ? 'selected' : ''; ?>>Male</option>
+                            <option value="female" <?php echo $genderFilter === 'female' ? 'selected' : ''; ?>>Female</option>
+                            <option value="unisex" <?php echo $genderFilter === 'unisex' ? 'selected' : ''; ?>>Unisex</option>
                         </select>
                     </div>
                     
@@ -310,14 +325,14 @@ $adminId = getCurrentAdminId();
                         <?php if ($totalPages > 1): ?>
                             <div class="pagination">
                                 <?php if ($page > 1): ?>
-                                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>&status=<?php echo $statusFilter; ?>" 
+                                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>&gender=<?php echo $genderFilter; ?>&status=<?php echo $statusFilter; ?>" 
                                        class="btn btn-outline">Previous</a>
                                 <?php endif; ?>
                                 
                                 <span class="page-info">Page <?php echo $page; ?> of <?php echo $totalPages; ?></span>
                                 
                                 <?php if ($page < $totalPages): ?>
-                                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>&status=<?php echo $statusFilter; ?>" 
+                                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>&gender=<?php echo $genderFilter; ?>&status=<?php echo $statusFilter; ?>" 
                                        class="btn btn-outline">Next</a>
                                 <?php endif; ?>
                             </div>
