@@ -222,7 +222,33 @@ $flash = getFlashMessage();
                                 
                                 <div class="product-info">
                                     <span class="product-category"><?php echo cleanOutput($product['category_name']); ?></span>
-                                    <h3 class="product-name"><?php echo cleanOutput($product['name']); ?></h3>
+                                    <h3 class="product-name">
+                                        <span><?php echo cleanOutput($product['name']); ?></span>
+                                        
+                                        <!-- Wishlist Heart Button -->
+                                        <?php if (isLoggedIn()): ?>
+                                            <?php
+                                            $userId = getCurrentUserId();
+                                            $inWishlist = fetchOne("SELECT wishlist_id FROM wishlist WHERE user_id = ? AND product_id = ?", 
+                                                [$userId, $product['product_id']]);
+                                            ?>
+                                            <a href="<?php echo $inWishlist ? 'wishlist.php?remove=' . $inWishlist['wishlist_id'] : 'wishlist-add.php?product_id=' . $product['product_id']; ?>" 
+                                               class="wishlist-btn <?php echo $inWishlist ? 'active' : ''; ?>" 
+                                               title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>">
+                                                <svg viewBox="0 0 24 24" fill="<?php echo $inWishlist ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="2">
+                                                    <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                                                </svg>
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $product['slug']); ?>" 
+                                               class="wishlist-btn" 
+                                               title="Sign in to add to wishlist">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
+                                                </svg>
+                                            </a>
+                                        <?php endif; ?>
+                                    </h3>
                                     
                                     <div class="product-price">
                                         <span class="current-price"><?php echo formatPrice($product['base_price']); ?></span>
@@ -232,25 +258,6 @@ $flash = getFlashMessage();
                                     </div>
                                 </div>
                             </a>
-                            
-                            <!-- Quick Add Button -->
-                            <?php if ($product['min_stock'] > 0): ?>
-                                <?php if (isLoggedIn()): ?>
-                                    <button class="quick-add-btn" data-product-id="<?php echo $product['product_id']; ?>">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M12 5v14M5 12h14"></path>
-                                        </svg>
-                                        Quick Add
-                                    </button>
-                                <?php else: ?>
-                                    <a href="login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $product['slug']); ?>" class="quick-add-btn" style="text-decoration: none;">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M12 5v14M5 12h14"></path>
-                                        </svg>
-                                        Sign In to Add
-                                    </a>
-                                <?php endif; ?>
-                            <?php endif; ?>
                         </article>
                     <?php endforeach; ?>
                 <?php endif; ?>

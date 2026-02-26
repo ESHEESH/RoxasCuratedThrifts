@@ -217,27 +217,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <div class="product-info-panel">
                     <div class="product-header">
                         <span class="product-category"><?php echo cleanOutput($product['category_name']); ?></span>
+                    <div class="product-header">
+                        <span class="product-category"><?php echo cleanOutput($product['category_name']); ?></span>
                         <h1 class="product-title"><?php echo cleanOutput($product['name']); ?></h1>
                         
-                        <div class="product-meta">
-                            <span class="condition-badge condition-<?php echo $product['condition_status']; ?>">
-                                <?php echo ucwords(str_replace('_', ' ', $product['condition_status'])); ?>
-                            </span>
-                            <?php if ($product['brand']): ?>
-                                <span class="product-brand"><?php echo cleanOutput($product['brand']); ?></span>
-                            <?php endif; ?>
-                        </div>
+                        <?php if ($product['brand']): ?>
+                            <span class="product-brand"><?php echo cleanOutput($product['brand']); ?></span>
+                        <?php endif; ?>
                         
                         <div class="product-price">
-                            <?php if ($minPrice !== $maxPrice): ?>
-                                <span class="price-range"><?php echo formatPrice($minPrice); ?> - <?php echo formatPrice($maxPrice); ?></span>
-                            <?php else: ?>
-                                <span class="current-price"><?php echo formatPrice($minPrice); ?></span>
-                            <?php endif; ?>
+                            <span class="current-price"><?php echo formatPrice($product['base_price']); ?></span>
                             <?php if ($product['original_price']): ?>
                                 <span class="original-price"><?php echo formatPrice($product['original_price']); ?></span>
                                 <span class="discount-badge">
-                                    <?php echo round((1 - $minPrice / $product['original_price']) * 100); ?>% OFF
+                                    <?php echo round((1 - $product['base_price'] / $product['original_price']) * 100); ?>% OFF
                                 </span>
                             <?php endif; ?>
                         </div>
@@ -245,6 +238,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     
                     <div class="product-description">
                         <p><?php echo nl2br(cleanOutput($product['description'])); ?></p>
+                    </div>
+                    
+                    <div class="product-meta" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span class="condition-badge condition-<?php echo $product['condition_status']; ?>">
+                            <?php echo ucwords(str_replace('_', ' ', $product['condition_status'])); ?>
+                        </span>
                     </div>
                     
                     <!-- Variant Selection -->

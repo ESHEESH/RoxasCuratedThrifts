@@ -10,24 +10,26 @@
  * - Quick actions (edit, delete, toggle status)
  * - Pagination
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/../includes/functions.php';
 requireAdminLogin();
 
-// Handle product deletion
+$adminId = getCurrentAdminId();
+
+// Handle product deletion (soft delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
     $productId = (int)$_POST['product_id'];
     
-    // Log the action
-    logAdminAction($adminId, 'delete', 'product', $productId, null, null);
-    
     // Soft delete - set is_active to false
     executeQuery("UPDATE products SET is_active = FALSE WHERE product_id = ?", [$productId]);
-    setFlashMessage('success', 'Product deleted successfully');
-    redirect('products.php');
+    
+    // Log the action
+    logActivity('product_deleted', 'product', $productId);
+    
+    setFlashMessage('success', 'Product moved to trash');
+    header("Location: products.php");
+    exit();
 }
 
 // Handle status toggle
@@ -36,24 +38,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
     $currentStatus = fetchOne("SELECT is_active FROM products WHERE product_id = ?", [$productId]);
     $newStatus = $currentStatus['is_active'] ? 0 : 1;
     
-    logAdminAction($adminId, 'update', 'product', $productId, ['is_active' => $currentStatus['is_active']], ['is_active' => $newStatus]);
+    logActivity('product_status_updated', 'product', $productId);
     
     executeQuery("UPDATE products SET is_active = ? WHERE product_id = ?", [$newStatus, $productId]);
     setFlashMessage('success', 'Product status updated');
-    redirect('products.php');
+    header("Location: products.php");
+    exit();
 }
 
 // Get filter parameters
 $search = $_GET['search'] ?? '';
 $categoryFilter = $_GET['category'] ?? '';
 $stockFilter = $_GET['stock'] ?? '';
+$statusFilter = $_GET['status'] ?? 'active'; // Default to showing only active products
 $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 20;
 $offset = ($page - 1) * $perPage;
 
 // Build query
-$whereConditions = ['p.is_active = TRUE'];
+$whereConditions = [];
 $params = [];
+
+// Status filter
+if ($statusFilter === 'active') {
+    $whereConditions[] = 'p.is_active = TRUE';
+} elseif ($statusFilter === 'inactive') {
+    $whereConditions[] = 'p.is_active = FALSE';
+}
+// If 'all', don't add any status condition
 
 if ($search) {
     $whereConditions[] = '(p.name LIKE ? OR p.description LIKE ? OR p.brand LIKE ?)';
@@ -72,7 +84,7 @@ if ($stockFilter === 'low') {
     $whereConditions[] = 'COALESCE(SUM(pv.stock_quantity), 0) = 0';
 }
 
-$whereClause = implode(' AND ', $whereConditions);
+$whereClause = !empty($whereConditions) ? implode(' AND ', $whereConditions) : '1=1';
 
 // Get total count
 $countSql = "SELECT COUNT(DISTINCT p.product_id) as total 
@@ -176,8 +188,16 @@ $adminId = getCurrentAdminId();
                         </select>
                     </div>
                     
+                    <div class="filter-group">
+                        <select name="status" class="filter-select">
+                            <option value="active" <?php echo $statusFilter === 'active' ? 'selected' : ''; ?>>Active Only</option>
+                            <option value="inactive" <?php echo $statusFilter === 'inactive' ? 'selected' : ''; ?>>Inactive Only</option>
+                            <option value="all" <?php echo $statusFilter === 'all' ? 'selected' : ''; ?>>All Products</option>
+                        </select>
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="products.php" class="btn btn-outline">Clear</a>
+                    <a href="products.php?status=active" class="btn btn-outline">Clear</a>
                 </form>
             </div>
             
@@ -205,7 +225,7 @@ $adminId = getCurrentAdminId();
                                 </thead>
                                 <tbody>
                                     <?php foreach ($products as $product): ?>
-                                        <tr>
+                                        <tr style="<?php echo !$product['is_active'] ? 'opacity: 0.6; background: #f9f9f9;' : ''; ?>">
                                             <td>
                                                 <div class="product-info">
                                                     <div class="product-image">
@@ -251,11 +271,22 @@ $adminId = getCurrentAdminId();
                                                     </a>
                                                     <form method="POST" style="display: inline;" onsubmit="return confirm('Toggle status for this product?');">
                                                         <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                                                        <button type="submit" name="toggle_status" class="btn btn-sm btn-outline" title="Toggle Status">
-                                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
-                                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                                <circle cx="12" cy="12" r="3"></circle>
-                                                            </svg>
+                                                        <button type="submit" name="toggle_status" class="btn btn-sm btn-outline" 
+                                                                title="<?php echo $product['is_active'] ? 'Deactivate' : 'Activate'; ?>"
+                                                                style="<?php echo !$product['is_active'] ? 'opacity: 0.5;' : ''; ?>">
+                                                            <?php if ($product['is_active']): ?>
+                                                                <!-- Open Eye (Active) -->
+                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                                </svg>
+                                                            <?php else: ?>
+                                                                <!-- Closed Eye (Inactive) -->
+                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                                                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                                                </svg>
+                                                            <?php endif; ?>
                                                         </button>
                                                     </form>
                                                     <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
@@ -279,14 +310,14 @@ $adminId = getCurrentAdminId();
                         <?php if ($totalPages > 1): ?>
                             <div class="pagination">
                                 <?php if ($page > 1): ?>
-                                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>" 
+                                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>&status=<?php echo $statusFilter; ?>" 
                                        class="btn btn-outline">Previous</a>
                                 <?php endif; ?>
                                 
                                 <span class="page-info">Page <?php echo $page; ?> of <?php echo $totalPages; ?></span>
                                 
                                 <?php if ($page < $totalPages): ?>
-                                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>" 
+                                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo $categoryFilter; ?>&stock=<?php echo $stockFilter; ?>&status=<?php echo $statusFilter; ?>" 
                                        class="btn btn-outline">Next</a>
                                 <?php endif; ?>
                             </div>
@@ -303,6 +334,13 @@ $adminId = getCurrentAdminId();
             const flash = document.getElementById('flashMessage');
             if (flash) flash.remove();
         }, 5000);
+        
+        // Auto-submit filters on change
+        document.querySelectorAll('.filter-select').forEach(select => {
+            select.addEventListener('change', function() {
+                this.closest('form').submit();
+            });
+        });
     </script>
 </body>
 </html>

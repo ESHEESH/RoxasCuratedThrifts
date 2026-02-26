@@ -168,7 +168,7 @@ $flash = getFlashMessage();
                         id="email" 
                         name="email" 
                         value="<?php echo cleanOutput($email); ?>"
-                        placeholder="your@email.com"
+                        placeholder="Email Address"
                         required
                         autocomplete="email"
                     >

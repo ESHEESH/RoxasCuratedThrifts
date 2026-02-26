@@ -4,8 +4,6 @@
  * 
  * Edit existing product with variant management.
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/../includes/functions.php';
@@ -22,7 +20,8 @@ $product = fetchOne("SELECT p.*, c.name as category_name
 
 if (!$product) {
     setFlashMessage('error', 'Product not found');
-    redirect('products.php');
+    header("Location: products.php");
+    exit();
 }
 
 // Get product variants
@@ -37,7 +36,11 @@ $categories = fetchAll("SELECT * FROM categories WHERE is_active = TRUE ORDER BY
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
-    verifyCsrfToken($_POST['csrf_token'] ?? '');
+    if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
+        setFlashMessage('error', 'Invalid request');
+        header("Location: products.php");
+        exit();
+    }
     
     $name = trim($_POST['name'] ?? '');
     $categoryId = (int)($_POST['category_id'] ?? 0);
@@ -124,11 +127,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         // Log the action
-        $newValues = compact('name', 'category_id', 'base_price', 'condition_status', 'brand', 'description', 'is_featured', 'is_active');
-        logAdminAction($adminId, 'update', 'product', $productId, $oldValues, $newValues);
+        logActivity('product_updated', 'product', $productId);
         
         setFlashMessage('success', 'Product updated successfully');
-        redirect('products.php');
+        header("Location: products.php");
+        exit();
     }
 }
 
@@ -142,10 +145,11 @@ if (isset($_GET['delete_image'])) {
         if (file_exists($filepath)) unlink($filepath);
         
         executeQuery("DELETE FROM product_images WHERE image_id = ?", [$imageId]);
-        logAdminAction($adminId, 'delete', 'product_image', $imageId, null, null);
+        logActivity('product_image_deleted', 'product_image', $imageId);
         
         setFlashMessage('success', 'Image deleted');
-        redirect('product-edit.php?id=' . $productId);
+        header("Location: product-edit.php?id=" . $productId);
+        exit();
     }
 }
 
@@ -153,10 +157,11 @@ if (isset($_GET['delete_image'])) {
 if (isset($_GET['delete_variant'])) {
     $variantId = (int)$_GET['delete_variant'];
     executeQuery("DELETE FROM product_variants WHERE variant_id = ? AND product_id = ?", [$variantId, $productId]);
-    logAdminAction($adminId, 'delete', 'product_variant', $variantId, null, null);
+    logActivity('product_variant_deleted', 'product_variant', $variantId);
     
     setFlashMessage('success', 'Variant deleted');
-    redirect('product-edit.php?id=' . $productId);
+    header("Location: product-edit.php?id=" . $productId);
+    exit();
 }
 
 // Generate CSRF token

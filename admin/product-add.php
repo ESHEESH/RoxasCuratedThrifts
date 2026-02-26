@@ -4,8 +4,6 @@
  * 
  * Allows admins to add new products with variants.
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/../includes/functions.php';
@@ -114,16 +112,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
-                // Handle image upload
-                if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
-                    $uploadResult = validateFileUpload($_FILES['product_image']);
-                    
-                    if ($uploadResult['valid']) {
-                        move_uploaded_file($_FILES['product_image']['tmp_name'], $uploadResult['path']);
+                // Handle image uploads (up to 5 images)
+                $imageFields = ['image_front', 'image_back', 'image_model1', 'image_model2', 'image_model3'];
+                $imageLabels = ['Front Photo', 'Back Photo', 'Model Photo 1', 'Model Photo 2', 'Model Photo 3'];
+                $displayOrder = 0;
+                
+                foreach ($imageFields as $index => $fieldName) {
+                    if (isset($_FILES[$fieldName]) && $_FILES[$fieldName]['error'] === UPLOAD_ERR_OK) {
+                        $file = $_FILES[$fieldName];
                         
-                        $imagePath = 'uploads/' . $uploadResult['filename'];
-                        executeQuery("INSERT INTO product_images (product_id, image_path, is_primary, display_order) 
-                                     VALUES (?, ?, 1, 0)", [$productId, $imagePath]);
+                        // Validate file
+                        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                        $maxSize = 5 * 1024 * 1024; // 5MB
+                        
+                        if (!in_array($file['type'], $allowedTypes)) {
+                            $errors[] = $imageLabels[$index] . ": Invalid file type.";
+                            continue;
+                        }
+                        
+                        if ($file['size'] > $maxSize) {
+                            $errors[] = $imageLabels[$index] . ": File too large (max 5MB).";
+                            continue;
+                        }
+                        
+                        // Generate unique filename
+                        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                        $filename = $slug . '-' . $fieldName . '-' . time() . '.' . $extension;
+                        $uploadPath = __DIR__ . '/../assets/images/products/' . $filename;
+                        
+                        // Move file
+                        if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                            // Insert into database
+                            $isPrimary = ($displayOrder === 0) ? 1 : 0; // First image is primary
+                            executeQuery("INSERT INTO product_images (product_id, image_path, is_primary, display_order) 
+                                         VALUES (?, ?, ?, ?)", [$productId, $filename, $isPrimary, $displayOrder]);
+                            $displayOrder++;
+                        }
                     }
                 }
                 
@@ -349,9 +373,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         
                         <div class="form-group">
-                            <label for="product_image">Product Image</label>
-                            <input type="file" id="product_image" name="product_image" accept="image/*">
-                            <small style="color: #666;">Max 5MB. JPG, PNG, GIF, WebP accepted.</small>
+                            <label>Product Images (Upload up to 5 images)</label>
+                            <p style="color: #666; font-size: 0.875rem; margin-bottom: 1rem;">Max 5MB per image. JPG, PNG, GIF, WebP accepted.</p>
+                            
+                            <div style="display: grid; gap: 1rem;">
+                                <div>
+                                    <label for="image_front" style="font-weight: 500; font-size: 0.875rem;">Front Photo (Primary)</label>
+                                    <input type="file" id="image_front" name="image_front" accept="image/*">
+                                </div>
+                                
+                                <div>
+                                    <label for="image_back" style="font-weight: 500; font-size: 0.875rem;">Back Photo</label>
+                                    <input type="file" id="image_back" name="image_back" accept="image/*">
+                                </div>
+                                
+                                <div>
+                                    <label for="image_model1" style="font-weight: 500; font-size: 0.875rem;">Model Photo 1</label>
+                                    <input type="file" id="image_model1" name="image_model1" accept="image/*">
+                                </div>
+                                
+                                <div>
+                                    <label for="image_model2" style="font-weight: 500; font-size: 0.875rem;">Model Photo 2</label>
+                                    <input type="file" id="image_model2" name="image_model2" accept="image/*">
+                                </div>
+                                
+                                <div>
+                                    <label for="image_model3" style="font-weight: 500; font-size: 0.875rem;">Model Photo 3</label>
+                                    <input type="file" id="image_model3" name="image_model3" accept="image/*">
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
