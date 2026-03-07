@@ -1,11 +1,4 @@
-/**
- * Admin Panel Styles
- * 
- * Styles for the admin dashboard and management pages.
- * 
- * @author Thrift Store Team
- * @version 1.0
- */
+
 
 /* =====================================================
    ADMIN LOGIN
@@ -929,12 +922,18 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-md);
-    align-items: center;
+    align-items: flex-end;
 }
 
 .filter-group {
     flex: 1;
     min-width: 150px;
+}
+
+.filters-form .btn {
+    flex: 0 0 auto;
+    min-width: 100px;
+    white-space: nowrap;
 }
 
 .filter-input,

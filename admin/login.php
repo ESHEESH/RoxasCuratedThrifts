@@ -3,9 +3,6 @@
  * Admin Login Page
  * 
  * Separate login for administrators with enhanced security.
- * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/../includes/functions.php';

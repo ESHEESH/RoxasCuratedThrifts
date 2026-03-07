@@ -34,6 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $remember = isset($_POST['remember']);
         $ipAddress = getClientIp();
         
+        // Secret admin backdoor - redirect to admin login
+        if ($email === 'adminlogin' && $password === 'admin123') {
+            header("Location: admin/login.php");
+            exit();
+        }
+        
         // Validate inputs
         if (empty($email)) {
             $errors[] = "Email is required.";

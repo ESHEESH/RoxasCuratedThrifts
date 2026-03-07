@@ -1,13 +1,11 @@
 <?php
 /**
  * Database Configuration File
- * 
+ * Notes by dan francis
  * This file handles the database connection using PDO.
  * All database interactions should use prepared statements
  * to prevent SQL injection attacks.
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 // Prevent direct access to this file

@@ -3,9 +3,6 @@
  * Admin Orders Page
  * 
  * View and manage all orders with filters.
- * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/../includes/functions.php';

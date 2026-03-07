@@ -8,8 +8,6 @@
  * - Order summary
  * - Payment method selection
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/includes/functions.php';
@@ -294,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 data-rate="<?php echo $rate['base_rate']; ?>"
                                                 <?php echo ($_POST['continent'] ?? $user['continent'] ?? '') === $continentName ? 'selected' : ''; ?>>
                                             <?php echo $continentName; ?> 
-                                            (<?php echo $continentName === 'Asia' && $rate['country'] === 'Philippines' ? '₱' . $rate['base_rate'] : '₱' . $rate['base_rate']; ?>)
+                                            (<?php echo $continentName === 'Asia' && $rate['country'] === 'Philippines' ? '₱' . $rate['base_rate'] : '$' . $rate['base_rate']; ?>)
                                         </option>
                                     <?php endforeach; ?>
                                 </select>

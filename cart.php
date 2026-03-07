@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopping Cart Page
- * 
+ * NOTE: FIX THE BUGS HERE CANT ADD TO CART FOR SOME REASON
  * Displays cart items with:
  * - Quantity management
  * - Remove items
@@ -10,8 +10,7 @@
  * 
  * Users can view cart but need to login to proceed to checkout.
  * 
- * @author Thrift Store Team
- * @version 1.0
+
  */
 
 require_once __DIR__ . '/includes/functions.php';

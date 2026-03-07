@@ -4,8 +4,7 @@
  * 
  * Shows order confirmation after successful checkout.
  * 
- * @author Thrift Store Team
- * @version 1.0
+
  */
 
 require_once __DIR__ . '/includes/functions.php';

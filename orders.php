@@ -4,8 +4,7 @@
  * 
  * Displays user's order history with status tracking.
  * 
- * @author Thrift Store Team
- * @version 1.0
+
  */
 
 require_once __DIR__ . '/includes/functions.php';

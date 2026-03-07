@@ -11,8 +11,6 @@
  * - CSRF protection
  * - Rate limiting
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/includes/functions.php';

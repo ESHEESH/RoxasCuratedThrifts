@@ -4,8 +4,6 @@
  * 
  * Allows users to set a new password using a valid reset token.
  * 
- * @author Thrift Store Team
- * @version 1.0
  */
 
 require_once __DIR__ . '/includes/functions.php';
