@@ -58,7 +58,7 @@
                         <li><a href="<?php echo SITE_URL; ?>/faq.php">FAQ</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/shipping-info.php">Shipping Info</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/returns-exchanges.php">Returns & Exchanges</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>shop/size-guide.php">Size Guide</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/size-guide.php">Size Guide</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/contact.php">Contact Us</a></li>
                     </ul>
                 </div>

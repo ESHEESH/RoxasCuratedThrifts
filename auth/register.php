@@ -156,8 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Create an account at <?php echo SITE_NAME; ?>">
     <title>Register - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/auth.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="auth-page">
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
-                <a href="index.php">
+                <a href="<?php echo SITE_URL; ?>/index.php">
                     <h1><?php echo SITE_NAME; ?></h1>
                 </a>
                 <p>Join our curated thrift community</p>
@@ -314,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <div class="auth-back">
-                <a href="index.php" class="back-link">
+                <a href="<?php echo SITE_URL; ?>/index.php" class="back-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"></path>
                     </svg>
@@ -324,6 +324,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="../assets/js/auth.js"></script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/auth.js"></script>
 </body>
 </html>

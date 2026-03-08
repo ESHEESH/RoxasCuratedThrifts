@@ -11,7 +11,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     // =====================================================
-    // PASSWORD TOGGLE
+    // PASSWORD TOGGLE - EYE ICON FEATURE
+    // 
+    // TO DISABLE: Comment out this entire section (lines 14-38)
+    // Also remove HTML from admin/login.php and CSS from admin.css
     // =====================================================
     
     /**
@@ -30,10 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Attach toggle handlers
+    // Attach toggle handlers to all password toggle buttons
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', () => togglePassword(button));
     });
+    // END: Password Toggle Feature
     
     // =====================================================
     // PASSWORD STRENGTH INDICATOR

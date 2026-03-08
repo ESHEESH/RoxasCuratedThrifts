@@ -12,8 +12,8 @@ $pageTitle = 'Size Guide';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .size-guide-container {
@@ -89,7 +89,7 @@ $pageTitle = 'Size Guide';
     
     <main class="container" style="padding-top: 90px; padding-bottom: 3rem;">
         <nav class="breadcrumb">
-            <a href="index.php">Home</a>
+            <a href="<?php echo SITE_URL; ?>/index.php">Home</a>
             <span class="separator">/</span>
             <span class="current">Size Guide</span>
         </nav>
@@ -287,6 +287,6 @@ $pageTitle = 'Size Guide';
     </main>
     
     <?php include __DIR__ . '/includes/footer.php'; ?>
-    <script src="assets/js/main.js"></script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/main.js"></script>
 </body>
 </html>

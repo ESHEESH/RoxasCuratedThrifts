@@ -99,8 +99,8 @@ $pageTitle = 'Create Admin';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - Admin Panel</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .form-card {
@@ -223,7 +223,7 @@ $pageTitle = 'Create Admin';
         </div>
     </main>
     
-    <script src="../assets/js/admin.js"></script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/admin.js"></script>
     <script>
         // Password strength indicator
         const passwordInput = document.getElementById('password');

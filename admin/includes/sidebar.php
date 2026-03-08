@@ -33,6 +33,12 @@ $menuItems = [
         'label' => 'Users',
         'link' => 'users.php'
     ],
+    'admins' => [
+        'icon' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
+        'label' => 'Admins',
+        'link' => 'admins.php',
+        'super_admin_only' => true
+    ],
     'statistics' => [
         'icon' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>',
         'label' => 'Statistics',
@@ -66,6 +72,12 @@ $menuItems = [
     <nav class="sidebar-nav">
         <ul class="sidebar-menu">
             <?php foreach ($menuItems as $key => $item): ?>
+                <?php 
+                // Skip super admin only items if not super admin
+                if (isset($item['super_admin_only']) && $item['super_admin_only'] && $_SESSION['admin_role'] !== 'super_admin') {
+                    continue;
+                }
+                ?>
                 <li class="sidebar-item <?php echo $currentPage === $key ? 'active' : ''; ?>">
                     <a href="<?php echo $item['link']; ?>" class="sidebar-link">
                         <span class="sidebar-icon"><?php echo $item['icon']; ?></span>

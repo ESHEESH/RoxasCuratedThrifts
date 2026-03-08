@@ -489,6 +489,15 @@ function getCurrentAdminId(): ?int {
     return $_SESSION['admin_id'] ?? null;
 }
 
+/**
+ * Check if current admin is super admin
+ * 
+ * @return bool True if super admin, false otherwise
+ */
+function isSuperAdmin(): bool {
+    return isAdminLoggedIn() && ($_SESSION['admin_role'] ?? '') === 'super_admin';
+}
+
 // =====================================================
 // UTILITY FUNCTIONS
 // =====================================================

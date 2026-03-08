@@ -2,13 +2,13 @@
 /**
  * Forgot Password Page
  * 
- * Password recovery functionality:
- * - Email verification
- * - Token generation with expiration
- * - Rate limiting
- * - CSRF protection
-
+ * Password recovery functionality with email and phone verification
  */
+
+// Enable error display for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/../includes/functions.php';
 
@@ -21,6 +21,7 @@ if (isLoggedIn()) {
 $errors = [];
 $success = false;
 $email = '';
+$phone = '';
 
 // Process forgot password request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,63 +30,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Invalid request. Please try again.";
     } else {
         $email = sanitizeEmail($_POST['email'] ?? '');
+        $phone = sanitizeInput($_POST['phone'] ?? '');
         $ipAddress = getClientIp();
         
         // Validate email
         if (empty($email)) {
             $errors[] = "Email is required.";
-        } elseif (!validateEmail($email)) {
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Please enter a valid email address.";
         }
         
         if (empty($errors)) {
-            // Check rate limiting (max 3 requests per hour)
-            $sql = "SELECT COUNT(*) as count FROM login_attempts 
-                    WHERE username_or_email = ? 
-                    AND attempted_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)
-                    AND is_successful = FALSE";
-            $result = fetchOne($sql, [$email]);
-            
-            if ($result['count'] >= 3) {
-                $errors[] = "Too many requests. Please try again in 1 hour.";
-            } else {
-                // Check if user exists
-                $sql = "SELECT user_id, username, email FROM users WHERE email = ? AND is_active = TRUE AND is_banned = FALSE";
-                $user = fetchOne($sql, [$email]);
+            try {
+                $db = Database::getConnection();
                 
-                if ($user) {
-                    // Generate reset token
-                    $resetToken = bin2hex(random_bytes(32));
-                    $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                // Check if user exists with matching email (phone column doesn't exist)
+                $sql = "SELECT user_id, username, email FROM users 
+                        WHERE email = ? AND is_active = 1 AND is_banned = 0";
+                
+                $stmt = $db->prepare($sql);
+                $stmt->execute([$email]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if ($user && isset($user['user_id'])) {
+                    // Store user ID in session for password reset
+                    $_SESSION['reset_user_id'] = $user['user_id'];
+                    $_SESSION['reset_verified'] = true;
+                    $_SESSION['reset_time'] = time();
                     
-                    // Save token to database
-                    $sql = "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE user_id = ?";
-                    executeQuery($sql, [$resetToken, $expires, $user['user_id']]);
-                    
-                    // Log the request
-                    logActivity('password_reset_requested', 'user', $user['user_id']);
-                    
-                    // TODO: Send email with reset link
-                    // For development, we'll show the link
-                    $resetLink = SITE_URL . '/reset-password.php?token=' . $resetToken;
-                    
-                    // In production, send email instead
-                    // sendPasswordResetEmail($user['email'], $user['username'], $resetLink);
-                    
-                    $success = true;
-                    
-                    // Store reset link in session for demo purposes
-                    $_SESSION['reset_link'] = $resetLink;
+                    // Redirect directly to reset password page
+                    header("Location: reset-password.php");
+                    exit();
+                } else {
+                    // Show generic error to prevent enumeration
+                    $errors[] = "The email does not match our records.";
                 }
-                
-                // Always show success message even if email not found (security)
-                // This prevents email enumeration attacks
-                if (!$success) {
-                    // Record attempt for rate limiting
-                    recordLoginAttempt($email, $ipAddress, false);
-                }
-                
-                $success = true;
+            } catch (PDOException $e) {
+                error_log("Database error in forgot-password: " . $e->getMessage());
+                $errors[] = "Database error: " . $e->getMessage();
+            } catch (Exception $e) {
+                error_log("Forgot password error: " . $e->getMessage());
+                $errors[] = "Error: " . $e->getMessage();
             }
         }
     }
@@ -98,8 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reset your <?php echo SITE_NAME; ?> password">
     <title>Forgot Password - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/auth.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="auth-page">
@@ -107,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
-                <a href="index.php">
+                <a href="<?php echo SITE_URL; ?>/index.php">
                     <h1><?php echo SITE_NAME; ?></h1>
                 </a>
                 <p>Password Recovery</p>
@@ -128,13 +113,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <?php if (isset($_SESSION['reset_link'])): ?>
                         <!-- Development Only: Show reset link -->
-                        <div class="dev-reset-link">
-                            <p><strong>Development Mode:</strong></p>
-                            <a href="<?php echo $_SESSION['reset_link']; ?>" class="btn btn-secondary">
+                        <div class="dev-reset-link" style="background: #f0f0f0; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                            <p style="margin-bottom: 0.5rem;"><strong>Development Mode:</strong></p>
+                            <p style="font-size: 0.875rem; color: #666; margin-bottom: 1rem;">Since email is not configured, use this link to reset your password:</p>
+                            <a href="<?php echo $_SESSION['reset_link']; ?>" class="btn btn-primary" style="display: inline-block;">
                                 Click here to reset password
                             </a>
+                            <p style="font-size: 0.75rem; color: #999; margin-top: 0.5rem;">This link will expire in 1 hour.</p>
                         </div>
-                        <?php unset($_SESSION['reset_link']); ?>
                     <?php endif; ?>
                     
                     <div class="auth-footer">
@@ -154,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
                 
                 <p class="auth-description">
-                    Enter your email address and we'll send you instructions to reset your password.
+                    Enter your email address to verify your identity and reset your password.
                 </p>
                 
                 <!-- Forgot Password Form -->
@@ -175,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     
                     <button type="submit" class="btn btn-primary btn-block">
-                        Send Reset Instructions
+                        Verify and Reset Password
                     </button>
                 </form>
                 
@@ -185,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             
             <div class="auth-back">
-                <a href="index.php" class="back-link">
+                <a href="<?php echo SITE_URL; ?>/index.php" class="back-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"></path>
                     </svg>
@@ -195,6 +181,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="../assets/js/auth.js"></script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/auth.js"></script>
 </body>
 </html>

@@ -16,34 +16,24 @@ if (isLoggedIn()) {
 
 $errors = [];
 $success = false;
-$validToken = false;
+$validSession = false;
 $userId = null;
 
-// Get token from URL
-$token = $_GET['token'] ?? '';
-
-// Validate token
-if (empty($token)) {
-    $errors[] = "Invalid reset link. Please request a new one.";
-} else {
-    // Check if token exists and is not expired
-    $sql = "SELECT user_id FROM users 
-            WHERE reset_token = ? 
-            AND reset_token_expires > NOW() 
-            AND is_active = TRUE 
-            AND is_banned = FALSE";
-    $user = fetchOne($sql, [$token]);
-    
-    if ($user) {
-        $validToken = true;
-        $userId = $user['user_id'];
+// Check if user came from forgot password verification
+if (isset($_SESSION['reset_verified']) && isset($_SESSION['reset_user_id'])) {
+    // Check if session is still valid (15 minutes)
+    if (isset($_SESSION['reset_time']) && (time() - $_SESSION['reset_time']) < 900) {
+        $validSession = true;
+        $userId = $_SESSION['reset_user_id'];
     } else {
-        $errors[] = "This reset link has expired or is invalid. Please request a new one.";
+        $errors[] = "Your session has expired. Please verify your identity again.";
     }
+} else {
+    $errors[] = "Invalid access. Please verify your identity first.";
 }
 
 // Process password reset
-if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($validSession && $_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token
     if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
         $errors[] = "Invalid request. Please try again.";
@@ -72,17 +62,29 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Hash new password
                 $passwordHash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
                 
-                // Update user password and clear reset token
+                // Get user info before update for logging
+                $sql = "SELECT email, username FROM users WHERE user_id = ?";
+                $userInfo = fetchOne($sql, [$userId]);
+                
+                // Update user password
                 $sql = "UPDATE users 
                         SET password_hash = ?, 
-                            reset_token = NULL, 
-                            reset_token_expires = NULL,
                             updated_at = NOW() 
                         WHERE user_id = ?";
                 executeQuery($sql, [$passwordHash, $userId]);
                 
-                // Log the password change
-                logActivity('password_reset_completed', 'user', $userId);
+                // Log the password change in activity logs
+                logActivity('password_reset_completed', 'user', $userId, null, [
+                    'email' => $userInfo['email'],
+                    'username' => $userInfo['username'],
+                    'ip_address' => getClientIp(),
+                    'timestamp' => date('Y-m-d H:i:s')
+                ]);
+                
+                // Clear reset session
+                unset($_SESSION['reset_user_id']);
+                unset($_SESSION['reset_verified']);
+                unset($_SESSION['reset_time']);
                 
                 $success = true;
                 
@@ -101,8 +103,8 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reset your <?php echo SITE_NAME; ?> password">
     <title>Reset Password - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/auth.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="auth-page">
@@ -110,7 +112,7 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
-                <a href="index.php">
+                <a href="<?php echo SITE_URL; ?>/index.php">
                     <h1><?php echo SITE_NAME; ?></h1>
                 </a>
                 <p>Create New Password</p>
@@ -132,8 +134,8 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
                         Sign In
                     </a>
                 </div>
-            <?php elseif (!$validToken): ?>
-                <!-- Invalid Token Message -->
+            <?php elseif (!$validSession): ?>
+                <!-- Invalid Session Message -->
                 <div class="alert alert-error">
                     <?php foreach ($errors as $error): ?>
                         <p><?php echo cleanOutput($error); ?></p>
@@ -142,7 +144,7 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <div class="auth-footer">
                     <a href="forgot-password.php" class="btn btn-primary btn-block">
-                        Request New Reset Link
+                        Verify Identity Again
                     </a>
                 </div>
             <?php else: ?>
@@ -162,7 +164,7 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
                 
                 <!-- Reset Password Form -->
-                <form method="POST" action="reset-password.php?token=<?php echo urlencode($token); ?>" class="auth-form" id="resetForm" novalidate>
+                <form method="POST" action="reset-password.php" class="auth-form" id="resetForm" novalidate>
                     <?php echo csrfField(); ?>
                     
                     <div class="form-group">
@@ -237,7 +239,7 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             
             <div class="auth-back">
-                <a href="index.php" class="back-link">
+                <a href="<?php echo SITE_URL; ?>/index.php" class="back-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"></path>
                     </svg>
@@ -247,6 +249,6 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="../assets/js/auth.js"></script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/auth.js"></script>
 </body>
 </html>

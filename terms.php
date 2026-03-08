@@ -12,8 +12,8 @@ $pageTitle = 'Terms of Service';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .terms-container {
@@ -210,6 +210,6 @@ $pageTitle = 'Terms of Service';
     </main>
     
     <?php include __DIR__ . '/includes/footer.php'; ?>
-    <script src="assets/js/main.js"></script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/main.js"></script>
 </body>
 </html>

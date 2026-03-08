@@ -61,6 +61,10 @@
     font-size: var(--font-size-base);
 }
 
+.admin-login-form .password-input-wrapper input {
+    padding-right: 3rem !important;
+}
+
 .admin-login-form input:focus {
     outline: none;
     border-color: var(--color-primary);
@@ -1209,3 +1213,193 @@
         display: block;
     }
 }
+
+/* =====================================================
+   ADMIN MANAGEMENT PAGE
+   ===================================================== */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.user-email {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.125rem;
+}
+
+.user-username {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.action-buttons form {
+    margin: 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.badge-danger {
+    background-color: #fee;
+    color: #c00;
+}
+
+.badge-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.badge-secondary {
+    background-color: #e9ecef;
+    color: #6c757d;
+}
+
+/* =====================================================
+   PASSWORD TOGGLE - EYE ICON FEATURE
+   
+   TO DISABLE THIS FEATURE:
+   1. Comment out this entire section (lines below)
+   2. Remove the password toggle HTML from admin/login.php
+   
+   LOCATION IN HTML:
+   - admin/login.php (lines ~118-135)
+   - Look for: <!-- START: Password Toggle Feature -->
+   
+   ===================================================== */
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 3rem !important;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: color 0.2s ease;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: #333;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.toggle-password .eye-off-icon {
+    display: none;
+}
+
+.toggle-password.showing .eye-icon {
+    display: none;
+}
+
+.toggle-password.showing .eye-off-icon {
+    display: block;
+}
+/* END: Password Toggle Feature */
