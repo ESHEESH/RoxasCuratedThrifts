@@ -5,7 +5,7 @@
  * Displays all products with filtering and sorting options.
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Get filter parameters
 $categorySlug = $_GET['category'] ?? '';
@@ -111,12 +111,12 @@ $pageTitle = $currentCategory ? $currentCategory['name'] : ($searchQuery ? 'Sear
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Browse our curated collection of thrifted fashion">
     <title><?php echo cleanOutput($pageTitle); ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="products-page">
         <!-- Page Header -->
@@ -298,7 +298,7 @@ $pageTitle = $currentCategory ? $currentCategory['name'] : ($searchQuery ? 'Sear
                                             $emoji = $emojis[$product['product_id'] % count($emojis)];
                                             ?>
                                             <?php if ($product['primary_image']): ?>
-                                                <img src="assets/images/products/<?php echo cleanOutput($product['primary_image']); ?>" 
+                                                <img src="../assets/images/products/<?php echo cleanOutput($product['primary_image']); ?>" 
                                                      alt="<?php echo cleanOutput($product['name']); ?>"
                                                      loading="lazy">
                                             <?php else: ?>
@@ -381,7 +381,7 @@ $pageTitle = $currentCategory ? $currentCategory['name'] : ($searchQuery ? 'Sear
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
     
     <script>
         /**
@@ -401,6 +401,7 @@ $pageTitle = $currentCategory ? $currentCategory['name'] : ($searchQuery ? 'Sear
             document.getElementById('filtersForm').classList.toggle('active');
         });
     </script>
-    <script src="assets/js/main.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/wishlist.js"></script>
 </body>
 </html>

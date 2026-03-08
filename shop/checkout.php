@@ -10,7 +10,7 @@
  * 
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Require login
 requireLogin('checkout.php');
@@ -222,12 +222,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Checkout - Complete your order">
     <title>Checkout - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="checkout-page">
         <div class="container">
@@ -446,7 +446,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="summary-item">
                                     <div class="item-image">
                                         <?php if ($item['primary_image']): ?>
-                                            <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
+                                            <img src="../assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
                                                  alt="<?php echo cleanOutput($item['product_name']); ?>"
                                                  loading="lazy">
                                         <?php else: ?>
@@ -509,7 +509,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
     
     <script>
         const subtotal = <?php echo $subtotal; ?>;
@@ -542,6 +542,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', updateShippingFee);
     </script>
-    <script src="assets/js/main.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

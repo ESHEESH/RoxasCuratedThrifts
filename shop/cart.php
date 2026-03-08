@@ -13,7 +13,7 @@
 
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 $userId = getCurrentUserId();
 $isLoggedIn = isLoggedIn();
@@ -111,8 +111,8 @@ $flash = getFlashMessage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Your shopping cart">
     <title>Shopping Cart - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .login-prompt {
@@ -163,7 +163,7 @@ $flash = getFlashMessage();
     </style>
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="cart-page">
         <div class="container">
@@ -191,8 +191,8 @@ $flash = getFlashMessage();
                     <h2>Your Cart is Waiting</h2>
                     <p>Sign in to view your cart, save items for later, and checkout faster. Don't have an account? Create one in seconds!</p>
                     <div class="btn-group">
-                        <a href="login.php?redirect=cart.php" class="btn btn-primary btn-lg">Sign In</a>
-                        <a href="register.php" class="btn btn-outline btn-lg">Create Account</a>
+                        <a href="../auth/login.php?redirect=cart.php" class="btn btn-primary btn-lg">Sign In</a>
+                        <a href="../auth/register.php" class="btn btn-outline btn-lg">Create Account</a>
                     </div>
                     <p style="margin-top: 1.5rem; margin-bottom: 0;">
                         <a href="products.php" class="continue-shopping">← Continue Shopping</a>
@@ -230,7 +230,7 @@ $flash = getFlashMessage();
                                     <!-- Product Image -->
                                     <a href="product-detail.php?slug=<?php echo $item['slug']; ?>" style="width: 100px; height: 130px; flex-shrink: 0; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
                                         <?php if ($item['primary_image']): ?>
-                                            <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
+                                            <img src="../assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
                                                  alt="<?php echo cleanOutput($item['product_name']); ?>"
                                                  loading="lazy"
                                                  style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
@@ -337,11 +337,11 @@ $flash = getFlashMessage();
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
     
     <?php if ($isLoggedIn): ?>
-        <script src="assets/js/cart.js"></script>
+        <script src="../assets/js/cart.js"></script>
     <?php endif; ?>
-    <script src="assets/js/main.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

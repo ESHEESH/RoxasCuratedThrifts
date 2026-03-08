@@ -73,11 +73,11 @@ $flash = getFlashMessage();
                     <span class="shop-me-label">SHOP ME</span>
                 </div>
                 <div class="pyramid-bottom">
-                    <a href="products.php?gender=male" class="gender-btn boys-btn">
+                    <a href="shop/products.php?gender=male" class="gender-btn boys-btn">
                         <span>BOYS</span>
                     </a>
                     <span class="gender-divider">|</span>
-                    <a href="products.php?gender=female" class="gender-btn girls-btn">
+                    <a href="shop/products.php?gender=female" class="gender-btn girls-btn">
                         <span>GIRLS</span>
                     </a>
                 </div>
@@ -97,7 +97,7 @@ $flash = getFlashMessage();
             </p>
             
             <div class="hero-actions">
-                <a href="products.php" class="btn btn-primary btn-lg">
+                <a href="shop/products.php" class="btn btn-primary btn-lg">
                     Shop Now
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"></path>
@@ -126,7 +126,7 @@ $flash = getFlashMessage();
             
             <div class="categories-grid">
                 <?php foreach ($categories as $category): ?>
-                    <a href="products.php?category=<?php echo $category['slug']; ?>" class="category-card">
+                    <a href="shop/products.php?category=<?php echo $category['slug']; ?>" class="category-card">
                         <div class="category-image">
                             <?php 
                             // Category images - place your images in assets/images/categories/
@@ -174,7 +174,7 @@ $flash = getFlashMessage();
             <div class="section-header">
                 <h2 class="section-title">Featured Finds</h2>
                 <p class="section-subtitle">Handpicked just for you</p>
-                <a href="products.php" class="view-all-link">
+                <a href="shop/products.php" class="view-all-link">
                     View All
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"></path>
@@ -190,7 +190,7 @@ $flash = getFlashMessage();
                 <?php else: ?>
                     <?php foreach ($featuredProducts as $product): ?>
                         <article class="product-card">
-                            <a href="product-detail.php?slug=<?php echo $product['slug']; ?>" class="product-link">
+                            <a href="shop/product-detail.php?slug=<?php echo $product['slug']; ?>" class="product-link">
                                 <div class="product-image">
                                     <?php 
                                     // Product emojis based on category
@@ -247,7 +247,7 @@ $flash = getFlashMessage();
                                                 </svg>
                                             </a>
                                         <?php else: ?>
-                                            <a href="login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $product['slug']); ?>" 
+                                            <a href="auth/login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $product['slug']); ?>" 
                                                class="wishlist-btn" 
                                                title="Sign in to add to wishlist">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -346,5 +346,6 @@ $flash = getFlashMessage();
     <?php include __DIR__ . '/includes/footer.php'; ?>
     
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/wishlist.js"></script>
 </body>
 </html>

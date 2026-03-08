@@ -7,13 +7,13 @@
 
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Get order number from URL
 $orderNumber = $_GET['order'] ?? '';
 
 if (empty($orderNumber)) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -21,7 +21,7 @@ if (empty($orderNumber)) {
 $order = fetchOne("SELECT * FROM orders WHERE order_number = ?", [$orderNumber]);
 
 if (!$order) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -36,8 +36,8 @@ $pageTitle = 'Order Confirmation';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .confirmation-page {
@@ -172,7 +172,7 @@ $pageTitle = 'Order Confirmation';
     </style>
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="confirmation-page">
         <div class="confirmation-card">
@@ -219,11 +219,11 @@ $pageTitle = 'Order Confirmation';
             
             <div class="btn-group">
                 <a href="orders.php" class="btn btn-primary">View My Orders</a>
-                <a href="products.php" class="btn btn-outline">Continue Shopping</a>
+                <a href="../shop/products.php" class="btn btn-outline">Continue Shopping</a>
             </div>
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
 </html>

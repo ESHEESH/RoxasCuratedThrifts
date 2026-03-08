@@ -7,7 +7,7 @@
 
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Log the logout activity
 if (isLoggedIn()) {
@@ -43,5 +43,5 @@ if (isset($_COOKIE['remember_token'])) {
 }
 
 // Redirect to home page
-header("Location: index.php");
+header("Location: ../index.php");
 exit();

@@ -5,6 +5,22 @@
 # Enable rewrite engine
 RewriteEngine On
 
+# Backward compatibility redirects for old URLs
+RewriteRule ^login\.php$ auth/login.php [R=301,L]
+RewriteRule ^register\.php$ auth/register.php [R=301,L]
+RewriteRule ^logout\.php$ auth/logout.php [R=301,L]
+RewriteRule ^forgot-password\.php$ auth/forgot-password.php [R=301,L]
+RewriteRule ^reset-password\.php$ auth/reset-password.php [R=301,L]
+RewriteRule ^products\.php$ shop/products.php [R=301,L,QSA]
+RewriteRule ^product-detail\.php$ shop/product-detail.php [R=301,L,QSA]
+RewriteRule ^cart\.php$ shop/cart.php [R=301,L]
+RewriteRule ^checkout\.php$ shop/checkout.php [R=301,L]
+RewriteRule ^wishlist\.php$ shop/wishlist.php [R=301,L]
+RewriteRule ^wishlist-add\.php$ shop/wishlist-add.php [R=301,L,QSA]
+RewriteRule ^profile\.php$ user/profile.php [R=301,L]
+RewriteRule ^orders\.php$ user/orders.php [R=301,L]
+RewriteRule ^order-confirmation\.php$ user/order-confirmation.php [R=301,L,QSA]
+
 # Protect sensitive files
 <FilesMatch "^\.">
     Order allow,deny

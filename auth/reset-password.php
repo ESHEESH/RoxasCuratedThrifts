@@ -6,7 +6,7 @@
  * 
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Redirect if already logged in
 if (isLoggedIn()) {
@@ -101,8 +101,8 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reset your <?php echo SITE_NAME; ?> password">
     <title>Reset Password - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="auth-page">
@@ -247,6 +247,6 @@ if ($validToken && $_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="assets/js/auth.js"></script>
+    <script src="../assets/js/auth.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
  * 
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Require login
 requireLogin('profile.php');
@@ -93,8 +93,8 @@ $pageTitle = 'My Profile';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .profile-layout {
@@ -208,13 +208,13 @@ $pageTitle = 'My Profile';
     </style>
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="container" style="padding-top: 90px; padding-bottom: 3rem;">
         <!-- Page Header -->
         <div class="page-header" style="background: none; padding: 0; margin-bottom: 0;">
             <nav class="breadcrumb">
-                <a href="index.php">Home</a>
+                <a href="<?php echo SITE_URL; ?>/index.php">Home</a>
                 <span class="separator">/</span>
                 <span class="current">My Profile</span>
             </nav>
@@ -232,7 +232,7 @@ $pageTitle = 'My Profile';
                 
                 <ul class="profile-menu">
                     <li>
-                        <a href="profile.php" class="active">
+                        <a href="<?php echo SITE_URL; ?>/user/profile.php" class="active">
                             <span class="icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -243,7 +243,7 @@ $pageTitle = 'My Profile';
                         </a>
                     </li>
                     <li>
-                        <a href="orders.php">
+                        <a href="<?php echo SITE_URL; ?>/user/orders.php">
                             <span class="icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -255,7 +255,7 @@ $pageTitle = 'My Profile';
                         </a>
                     </li>
                     <li>
-                        <a href="wishlist.php">
+                        <a href="<?php echo SITE_URL; ?>/shop/wishlist.php">
                             <span class="icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                                     <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
@@ -265,7 +265,7 @@ $pageTitle = 'My Profile';
                         </a>
                     </li>
                     <li>
-                        <a href="logout.php">
+                        <a href="<?php echo SITE_URL; ?>/auth/logout.php">
                             <span class="icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -370,7 +370,7 @@ $pageTitle = 'My Profile';
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-    <script src="assets/js/main.js"></script>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

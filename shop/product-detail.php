@@ -13,7 +13,7 @@
  * @version 1.0
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Get product slug from URL
 $slug = $_GET['slug'] ?? '';
@@ -170,12 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php echo cleanOutput(truncateText($product['description'], 150)); ?>">
     <title><?php echo cleanOutput($product['name']); ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="product-detail-page">
         <div class="container">
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 $image = $images[$i];
                             ?>
                                 <div class="gallery-image">
-                                    <img src="assets/images/products/<?php echo cleanOutput($image['image_path']); ?>" 
+                                    <img src="../assets/images/products/<?php echo cleanOutput($image['image_path']); ?>" 
                                          alt="<?php echo cleanOutput($product['name']); ?> - View <?php echo $i + 1; ?>"
                                          loading="lazy">
                                 </div>
@@ -292,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                             <div class="option-group">
                                 <label class="option-label">
                                     Size
-                                    <a href="size-guide.php" class="size-guide-link" target="_blank">Size Guide</a>
+                                    <a href="<?php echo SITE_URL; ?>/size-guide.php" class="size-guide-link" target="_blank">Size Guide</a>
                                 </label>
                                 <div class="size-options">
                                     <?php foreach ($sizes as $size): ?>
@@ -350,7 +350,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                             Add to Cart
                                         </button>
                                         <a href="<?php echo $inWishlist ? 'wishlist.php?remove=' . $wishlistId : 'wishlist-add.php?product_id=' . $product['product_id']; ?>" 
-                                           class="btn btn-outline btn-lg" 
+                                           class="btn btn-outline btn-lg wishlist-btn-large <?php echo $inWishlist ? 'active' : ''; ?>" 
                                            style="padding: 0.75rem 1rem;"
                                            title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>">
                                             <svg viewBox="0 0 24 24" fill="<?php echo $inWishlist ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
@@ -362,11 +362,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <?php else: ?>
                                     <div style="background: #f8f8f8; border-radius: 12px; padding: 1.5rem; text-align: center;">
                                         <p style="margin-bottom: 1rem; color: #666;">Sign in to add items to your cart</p>
-                                        <a href="login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $product['slug']); ?>" class="btn btn-primary btn-block">
+                                        <a href="../auth/login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $product['slug']); ?>" class="btn btn-primary btn-block">
                                             Sign In to Shop
                                         </a>
                                         <p style="margin-top: 0.75rem; font-size: 0.875rem;">
-                                            Don't have an account? <a href="register.php" style="color: #1a1a1a; text-decoration: underline;">Create one</a>
+                                            Don't have an account? <a href="../auth/register.php" style="color: #1a1a1a; text-decoration: underline;">Create one</a>
                                         </p>
                                     </div>
                                 <?php endif; ?>
@@ -383,7 +383,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     
                     <!-- Product Details -->
                     <div class="product-details-accordion">
-                        <div class="accordion-item active">
+                        <div class="accordion-item">
                             <button class="accordion-header">
                                 <span>Description</span>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -456,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <a href="product-detail.php?slug=<?php echo $related['slug']; ?>" class="product-link">
                                     <div class="product-image">
                                         <?php if ($related['primary_image']): ?>
-                                            <img src="assets/images/products/<?php echo cleanOutput($related['primary_image']); ?>" 
+                                            <img src="../assets/images/products/<?php echo cleanOutput($related['primary_image']); ?>" 
                                                  alt="<?php echo cleanOutput($related['name']); ?>"
                                                  loading="lazy">
                                         <?php else: ?>
@@ -495,7 +495,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                                     </svg>
                                                 </a>
                                             <?php else: ?>
-                                                <a href="login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $related['slug']); ?>" 
+                                                <a href="../auth/login.php?redirect=<?php echo urlencode('product-detail.php?slug=' . $related['slug']); ?>" 
                                                    class="wishlist-btn" 
                                                    title="Sign in to add to wishlist">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -522,7 +522,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
     
     <script>
         // Product variants data for JavaScript
@@ -557,7 +557,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 imagesToShow.forEach((img, index) => {
                     const div = document.createElement('div');
                     div.className = 'gallery-image';
-                    div.innerHTML = `<img src="assets/images/products/${img.path}" alt="${img.alt} - View ${startIndex + index + 1}" loading="lazy">`;
+                    div.innerHTML = `<img src="../assets/images/products/${img.path}" alt="${img.alt} - View ${startIndex + index + 1}" loading="lazy">`;
                     gallery.appendChild(div);
                 });
                 
@@ -611,7 +611,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             relatedNext.disabled = relatedCarousel.scrollWidth <= relatedCarousel.clientWidth;
         }
     </script>
-    <script src="assets/js/product.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="../assets/js/product.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/wishlist.js"></script>
 </body>
 </html>

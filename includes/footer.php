@@ -14,7 +14,7 @@
         <div class="footer-main">
             <!-- Brand Column -->
             <div class="footer-brand">
-                <a href="index.php" class="footer-logo">
+                <a href="<?php echo SITE_URL; ?>/index.php" class="footer-logo">
                     <span class="logo-text"><?php echo "Roxas Thrift Store"; ?></span>
                 </a>
                 <p class="footer-tagline">Curated thrifted fashion for the unique you.</p>
@@ -44,31 +44,31 @@
                 <div class="footer-column">
                     <h4>Shop</h4>
                     <ul>
-                        <li><a href="products.php">All Products</a></li>
-                        <li><a href="products.php?category=clothes">Clothes</a></li>
-                        <li><a href="products.php?category=shoes">Shoes</a></li>
-                        <li><a href="products.php?category=bags">Bags</a></li>
-                        <li><a href="products.php?category=caps">Caps</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/shop/products.php">All Products</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=clothes">Clothes</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=shoes">Shoes</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=bags">Bags</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=caps">Caps</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h4>Help</h4>
                     <ul>
-                        <li><a href="faq.php">FAQ</a></li>
-                        <li><a href="shipping-info.php">Shipping Info</a></li>
-                        <li><a href="returns-exchanges.php">Returns & Exchanges</a></li>
-                        <li><a href="size-guide.php">Size Guide</a></li>
-                        <li><a href="contact.php">Contact Us</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/faq.php">FAQ</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/shipping-info.php">Shipping Info</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/returns-exchanges.php">Returns & Exchanges</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>shop/size-guide.php">Size Guide</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/contact.php">Contact Us</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h4>Company</h4>
                     <ul>
-                        <li><a href="about.php">About Us</a></li>
-                        <li><a href="terms.php">Terms of Service</a></li>
-                        <li><a href="privacy.php">Privacy Policy</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/about.php">About Us</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/terms.php">Terms of Service</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/privacy.php">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>

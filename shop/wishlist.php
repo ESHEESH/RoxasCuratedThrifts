@@ -5,7 +5,7 @@
  * Displays user's saved/wishlisted products.
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Require login
 requireLogin('wishlist.php');
@@ -70,8 +70,8 @@ $flash = getFlashMessage();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?> - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .profile-layout {
@@ -266,7 +266,7 @@ $flash = getFlashMessage();
     </style>
 </head>
 <body>
-    <?php include __DIR__ . '/includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
     
     <main class="container" style="padding-top: 90px; padding-bottom: 3rem;">
         <!-- Flash Messages -->
@@ -367,7 +367,7 @@ $flash = getFlashMessage();
                             <div class="wishlist-item">
                                 <div class="wishlist-image">
                                     <?php if ($item['primary_image']): ?>
-                                        <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
+                                        <img src="../assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
                                              alt="<?php echo cleanOutput($item['name']); ?>"
                                              loading="lazy">
                                     <?php else: ?>
@@ -396,7 +396,7 @@ $flash = getFlashMessage();
         </div>
     </main>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-    <script src="assets/js/main.js"></script>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

@@ -25,19 +25,19 @@ if (isLoggedIn()) {
 <header class="site-header" id="header">
     <div class="header-container">
         <!-- Logo -->
-        <a href="index.php" class="logo">
+        <a href="<?php echo SITE_URL; ?>/index.php" class="logo">
             <span class="logo-text"><?php echo "Roxas Thrift Store"; ?></span>
         </a>
         
         <!-- Desktop Navigation -->
         <nav class="main-nav">
             <ul class="nav-list">
-                <li><a href="index.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : ''; ?>">Home</a></li>
-                <li><a href="products.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'products.php' ? 'active' : ''; ?>">Shop</a></li>
-                <li><a href="products.php?category=clothes" class="nav-link">Clothes</a></li>
-                <li><a href="products.php?category=shoes" class="nav-link">Shoes</a></li>
-                <li><a href="products.php?category=bags" class="nav-link">Bags</a></li>
-                <li><a href="products.php?category=caps" class="nav-link">Caps</a></li>
+                <li><a href="<?php echo SITE_URL; ?>/index.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : ''; ?>">Home</a></li>
+                <li><a href="<?php echo SITE_URL; ?>/shop/products.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'products.php' ? 'active' : ''; ?>">Shop</a></li>
+                <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=clothes" class="nav-link">Clothes</a></li>
+                <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=shoes" class="nav-link">Shoes</a></li>
+                <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=bags" class="nav-link">Bags</a></li>
+                <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=caps" class="nav-link">Caps</a></li>
             </ul>
         </nav>
         
@@ -52,7 +52,7 @@ if (isLoggedIn()) {
             </button>
             
             <!-- Cart -->
-            <a href="cart.php" class="action-btn cart-btn" aria-label="Cart">
+            <a href="<?php echo SITE_URL; ?>/shop/cart.php" class="action-btn cart-btn" aria-label="Cart">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -78,16 +78,16 @@ if (isLoggedIn()) {
                             <span class="user-email"><?php echo cleanOutput($_SESSION['email'] ?? ''); ?></span>
                         </div>
                         <ul class="dropdown-menu">
-                            <li><a href="profile.php">My Profile</a></li>
-                            <li><a href="orders.php">My Orders</a></li>
-                            <li><a href="wishlist.php">Wishlist</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>/user/profile.php">My Profile</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>/user/orders.php">My Orders</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>/shop/wishlist.php">Wishlist</a></li>
                             <li class="divider"></li>
-                            <li><a href="logout.php" class="logout-link">Logout</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>/auth/logout.php" class="logout-link">Logout</a></li>
                         </ul>
                     </div>
                 </div>
             <?php else: ?>
-                <a href="login.php" class="btn btn-outline btn-sm">Sign In</a>
+                <a href="<?php echo SITE_URL; ?>/auth/login.php" class="btn btn-outline btn-sm">Sign In</a>
             <?php endif; ?>
             
             <!-- Mobile Menu Toggle -->
@@ -108,7 +108,7 @@ if (isLoggedIn()) {
     <!-- Search Bar (Hidden by default) -->
     <div class="search-bar" id="searchBar">
         <div class="search-container">
-            <form action="products.php" method="GET" class="search-form">
+            <form action="<?php echo SITE_URL; ?>/shop/products.php" method="GET" class="search-form">
                 <input type="text" name="search" placeholder="Search for products..." autocomplete="off">
                 <button type="button" class="search-close" aria-label="Close search">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -123,18 +123,18 @@ if (isLoggedIn()) {
     <!-- Mobile Navigation -->
     <nav class="mobile-nav" id="mobileNav">
         <ul class="mobile-nav-list">
-            <li><a href="index.php">Home</a></li>
-            <li><a href="products.php">Shop All</a></li>
-            <li><a href="products.php?category=clothes">Clothes</a></li>
-            <li><a href="products.php?category=shoes">Shoes</a></li>
-            <li><a href="products.php?category=bags">Bags</a></li>
-            <li><a href="products.php?category=caps">Caps</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/index.php">Home</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/shop/products.php">Shop All</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=clothes">Clothes</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=shoes">Shoes</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=bags">Bags</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/shop/products.php?category=caps">Caps</a></li>
         </ul>
         
         <?php if (!isLoggedIn()): ?>
             <div class="mobile-nav-actions">
-                <a href="login.php" class="btn btn-primary btn-block">Sign In</a>
-                <a href="register.php" class="btn btn-outline btn-block">Create Account</a>
+                <a href="<?php echo SITE_URL; ?>/auth/login.php" class="btn btn-primary btn-block">Sign In</a>
+                <a href="<?php echo SITE_URL; ?>/auth/register.php" class="btn btn-outline btn-block">Create Account</a>
             </div>
         <?php endif; ?>
     </nav>

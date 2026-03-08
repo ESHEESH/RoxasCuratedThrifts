@@ -12,7 +12,7 @@
  * @version 1.0
  */
 
-require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Redirect if already logged in
 if (isLoggedIn()) {
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Secret admin backdoor - redirect to admin login
         if ($email === 'adminlogin' && $password === 'admin123') {
-            header("Location: admin/login.php");
+            header("Location: ../admin/login.php");
             exit();
         }
         
@@ -130,8 +130,8 @@ $flash = getFlashMessage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Login to <?php echo SITE_NAME; ?>">
     <title>Login - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="auth-page">
@@ -234,6 +234,6 @@ $flash = getFlashMessage();
         </div>
     </div>
     
-    <script src="assets/js/auth.js"></script>
+    <script src="../assets/js/auth.js"></script>
 </body>
 </html>

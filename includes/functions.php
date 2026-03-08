@@ -450,7 +450,7 @@ function isAdminLoggedIn(): bool {
  */
 function requireLogin(string $redirect = ''): void {
     if (!isLoggedIn()) {
-        $loginUrl = SITE_URL . '/login.php';
+        $loginUrl = SITE_URL . '/auth/login.php';
         if ($redirect) {
             $loginUrl .= '?redirect=' . urlencode($redirect);
         }

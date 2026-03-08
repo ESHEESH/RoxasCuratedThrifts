@@ -170,7 +170,7 @@ $pageTitle = 'About Us';
                 <p>Follow us on social media to see new arrivals, styling tips, and behind-the-scenes content. Share your Roxas Thrift finds with #RoxasThrift and join our growing community of sustainable fashion lovers!</p>
                 
                 <p style="text-align: center; margin-top: 2rem;">
-                    <a href="products.php" class="btn btn-primary" style="display: inline-block;">Start Shopping</a>
+                    <a href="shop/products.php" class="btn btn-primary" style="display: inline-block;">Start Shopping</a>
                 </p>
             </div>
         </div>
