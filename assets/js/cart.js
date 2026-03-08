@@ -42,11 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Reload page to show updated totals
                     window.location.reload();
                 } else {
-                    alert(data.message || 'Failed to update quantity');
+                    showToast('Update Failed', data.message || 'Failed to update quantity', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                showToast('Error', 'An error occurred. Please try again.', 'error');
             }
         }
         
@@ -54,8 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
          * Remove item from cart
          */
         async function removeItem() {
-            if (!confirm('Are you sure you want to remove this item?')) return;
-            
             try {
                 const formData = new FormData();
                 formData.append('action', 'remove_item');
@@ -69,19 +67,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Animate removal
+                    // Animate removal first
+                    item.style.transition = 'all 0.3s ease';
                     item.style.opacity = '0';
                     item.style.transform = 'translateX(-20px)';
                     
+                    // Show success toast
+                    showToast('Item Removed', 'Item removed from cart', 'success', 3000);
+                    
+                    // Wait longer before reload to show toast
                     setTimeout(() => {
                         window.location.reload();
-                    }, 300);
+                    }, 1500);
                 } else {
-                    alert(data.message || 'Failed to remove item');
+                    showToast('Remove Failed', data.message || 'Failed to remove item', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                showToast('Error', 'An error occurred. Please try again.', 'error');
             }
         }
         

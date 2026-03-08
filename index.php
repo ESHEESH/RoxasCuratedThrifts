@@ -140,10 +140,12 @@ $flash = getFlashMessage();
                             ?>
                             <?php if ($category['image']): ?>
                                 <img src="assets/images/<?php echo cleanOutput($category['image']); ?>" 
-                                     alt="<?php echo cleanOutput($category['name']); ?>">
+                                     alt="<?php echo cleanOutput($category['name']); ?>"
+                                     loading="lazy">
                             <?php else: ?>
                                 <img src="assets/images/categories/<?php echo $catImage; ?>" 
                                      alt="<?php echo cleanOutput($category['name']); ?>"
+                                     loading="lazy"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div class="category-placeholder" style="display: none; height: 100%; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 1rem;">
                                     No Image

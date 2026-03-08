@@ -232,6 +232,7 @@ $flash = getFlashMessage();
                                         <?php if ($item['primary_image']): ?>
                                             <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
                                                  alt="<?php echo cleanOutput($item['product_name']); ?>"
+                                                 loading="lazy"
                                                  style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                                         <?php else: ?>
                                             👕
@@ -258,24 +259,28 @@ $flash = getFlashMessage();
                                         </div>
                                     </div>
                                     
-                                    <!-- Quantity -->
-                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                        <button type="button" class="qty-btn qty-minus" data-action="decrease" 
-                                                style="width: 32px; height: 32px; border: 1px solid #e0e0e0; border-radius: 6px; background: white; font-size: 1.25rem;">-</button>
-                                        <input type="number" class="qty-input" value="<?php echo $item['quantity']; ?>" 
-                                               min="1" max="<?php echo $item['stock_quantity']; ?>" readonly
-                                               style="width: 50px; text-align: center; border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.5rem;">
-                                        <button type="button" class="qty-btn qty-plus" data-action="increase"
-                                                style="width: 32px; height: 32px; border: 1px solid #e0e0e0; border-radius: 6px; background: white; font-size: 1.25rem;">+</button>
-                                    </div>
-                                    
-                                    <!-- Price & Remove -->
-                                    <div style="text-align: right;">
-                                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">
-                                            <?php echo formatPrice($item['final_price'] * $item['quantity']); ?>
+                                    <!-- Price with Highlight Background -->
+                                    <div style="text-align: right; display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <div style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #ffb74d;">
+                                            <div style="font-weight: 700; font-size: 1.25rem; color: #1a1a1a;">
+                                                <?php echo formatPrice($item['final_price'] * $item['quantity']); ?>
+                                            </div>
                                         </div>
+                                        
+                                        <!-- Quantity Controls -->
+                                        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                            <button type="button" class="qty-btn qty-minus" data-action="decrease" 
+                                                    style="width: 36px; height: 36px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 1.25rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">-</button>
+                                            <input type="number" class="qty-input" value="<?php echo $item['quantity']; ?>" 
+                                                   min="1" max="<?php echo $item['stock_quantity']; ?>" readonly
+                                                   style="width: 50px; text-align: center; border: 2px solid #e0e0e0; border-radius: 8px; padding: 0.5rem; font-weight: 600; font-size: 1rem;">
+                                            <button type="button" class="qty-btn qty-plus" data-action="increase"
+                                                    style="width: 36px; height: 36px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 1.25rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">+</button>
+                                        </div>
+                                        
+                                        <!-- Remove Button with Outline -->
                                         <button type="button" class="item-remove" data-action="remove" 
-                                                style="color: #ef4444; font-size: 0.875rem; background: none; border: none; cursor: pointer;">
+                                                style="color: #ef4444; font-size: 0.875rem; font-weight: 600; background: white; border: 2px solid #ef4444; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; transition: all 0.2s;">
                                             Remove
                                         </button>
                                     </div>

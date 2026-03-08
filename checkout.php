@@ -292,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 data-rate="<?php echo $rate['base_rate']; ?>"
                                                 <?php echo ($_POST['continent'] ?? $user['continent'] ?? '') === $continentName ? 'selected' : ''; ?>>
                                             <?php echo $continentName; ?> 
-                                            (<?php echo $continentName === 'Asia' && $rate['country'] === 'Philippines' ? '₱' . $rate['base_rate'] : '$' . $rate['base_rate']; ?>)
+                                            (₱<?php echo number_format($rate['base_rate'], 2); ?>)
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -348,10 +348,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="radio" name="payment_method" value="gcash" 
                                        <?php echo ($_POST['payment_method'] ?? '') === 'gcash' ? 'checked' : ''; ?> required>
                                 <div class="payment-card">
-                                    <div class="payment-icon gcash">GCash</div>
+                                    <div class="payment-icon-wrapper">
+                                        <svg class="payment-brand-icon gcash-icon" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                    </div>
                                     <div class="payment-info">
                                         <span class="payment-name">GCash</span>
                                         <span class="payment-desc">Pay with your GCash wallet</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
                                     </div>
                                 </div>
                             </label>
@@ -360,10 +369,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="radio" name="payment_method" value="maya" 
                                        <?php echo ($_POST['payment_method'] ?? '') === 'maya' ? 'checked' : ''; ?> required>
                                 <div class="payment-card">
-                                    <div class="payment-icon maya">Maya</div>
+                                    <div class="payment-icon-wrapper">
+                                        <svg class="payment-brand-icon maya-icon" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                                        </svg>
+                                    </div>
                                     <div class="payment-info">
                                         <span class="payment-name">Maya</span>
                                         <span class="payment-desc">Pay with your Maya wallet</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
                                     </div>
                                 </div>
                             </label>
@@ -372,10 +390,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="radio" name="payment_method" value="bank_transfer" 
                                        <?php echo ($_POST['payment_method'] ?? '') === 'bank_transfer' ? 'checked' : ''; ?> required>
                                 <div class="payment-card">
-                                    <div class="payment-icon bank">Bank</div>
+                                    <div class="payment-icon-wrapper">
+                                        <svg class="payment-brand-icon bank-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                        </svg>
+                                    </div>
                                     <div class="payment-info">
                                         <span class="payment-name">Bank Transfer</span>
                                         <span class="payment-desc">Transfer to our bank account</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
                                     </div>
                                 </div>
                             </label>
@@ -384,10 +412,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="radio" name="payment_method" value="cod" 
                                        <?php echo ($_POST['payment_method'] ?? '') === 'cod' ? 'checked' : ''; ?> required>
                                 <div class="payment-card">
-                                    <div class="payment-icon cod">COD</div>
+                                    <div class="payment-icon-wrapper">
+                                        <svg class="payment-brand-icon cod-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 7h-9"></path>
+                                            <path d="M14 17H5"></path>
+                                            <circle cx="17" cy="17" r="3"></circle>
+                                            <circle cx="7" cy="7" r="3"></circle>
+                                        </svg>
+                                    </div>
                                     <div class="payment-info">
                                         <span class="payment-name">Cash on Delivery</span>
                                         <span class="payment-desc">Pay when you receive</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
                                     </div>
                                 </div>
                             </label>
@@ -407,53 +447,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <div class="item-image">
                                         <?php if ($item['primary_image']): ?>
                                             <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
-                                                 alt="<?php echo cleanOutput($item['product_name']); ?>">
+                                                 alt="<?php echo cleanOutput($item['product_name']); ?>"
+                                                 loading="lazy">
+                                        <?php else: ?>
+                                            <div class="product-placeholder-small">📦</div>
                                         <?php endif; ?>
                                         <span class="item-qty"><?php echo $item['quantity']; ?></span>
                                     </div>
-                                    <div class="item-info">
+                                    <div class="item-details">
                                         <span class="item-name"><?php echo cleanOutput($item['product_name']); ?></span>
                                         <span class="item-variant"><?php echo $item['size']; ?> / <?php echo $item['color']; ?></span>
+                                        <span class="item-price"><?php echo formatPrice($item['final_price'] * $item['quantity']); ?></span>
                                     </div>
-                                    <span class="item-price"><?php echo formatPrice($item['final_price'] * $item['quantity']); ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
                         
-                        <div class="summary-divider"></div>
-                        
-                        <!-- Totals -->
-                        <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span id="subtotal"><?php echo formatPrice($subtotal); ?></span>
+                        <!-- Subtotal Card -->
+                        <div class="summary-info-card subtotal-card">
+                            <div class="info-row">
+                                <span class="info-label">Subtotal</span>
+                                <span class="info-value" id="subtotal"><?php echo formatPrice($subtotal); ?></span>
+                            </div>
                         </div>
                         
-                        <div class="summary-row">
-                            <span>Shipping</span>
-                            <span id="shippingFee">Select continent</span>
+                        <!-- Shipping Card -->
+                        <div class="summary-info-card shipping-card">
+                            <div class="info-row">
+                                <span class="info-label">Shipping</span>
+                                <span class="info-value" id="shippingFee">Select continent</span>
+                            </div>
                         </div>
                         
-                        <div class="summary-divider"></div>
-                        
-                        <div class="summary-row total">
-                            <span>Total</span>
-                            <span class="total-price" id="totalPrice"><?php echo formatPrice($subtotal); ?></span>
+                        <!-- Total Card -->
+                        <div class="summary-info-card total-card">
+                            <div class="info-row">
+                                <span class="info-label">Total</span>
+                                <span class="info-value total-price" id="totalPrice"><?php echo formatPrice($subtotal); ?></span>
+                            </div>
                         </div>
                         
                         <button type="submit" class="btn btn-primary btn-lg btn-block" id="placeOrderBtn">
-                            Place Order
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"></path>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
+                            Place Order
                         </button>
                         
-                        <p class="secure-notice">
+                        <div class="secure-notice-card">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
-                            Secure checkout
-                        </p>
+                            <span>Secure checkout</span>
+                        </div>
                     </div>
                 </aside>
             </form>

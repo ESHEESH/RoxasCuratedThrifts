@@ -248,7 +248,8 @@ $adminId = getCurrentAdminId();
                                                     <div class="product-image">
                                                         <?php if ($product['primary_image']): ?>
                                                             <img src="../assets/images/products/<?php echo cleanOutput($product['primary_image']); ?>" 
-                                                                 alt="<?php echo cleanOutput($product['name']); ?>">
+                                                                 alt="<?php echo cleanOutput($product['name']); ?>"
+                                                                 loading="lazy">
                                                         <?php else: ?>
                                                             <div class="product-placeholder">
                                                                 <?php 
@@ -356,6 +357,20 @@ $adminId = getCurrentAdminId();
         document.querySelectorAll('.filter-select').forEach(select => {
             select.addEventListener('change', function() {
                 this.closest('form').submit();
+            });
+        });
+        
+        // Lazy load images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', function() {
+                        this.classList.add('loaded');
+                    });
+                }
             });
         });
     </script>

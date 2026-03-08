@@ -114,7 +114,8 @@ $pageTitle = 'My Orders';
         }
         
         .profile-menu .icon {
-            font-size: 1.25rem;
+            width: 20px;
+            height: 20px;
         }
         
         .profile-content {
@@ -232,8 +233,10 @@ $pageTitle = 'My Orders';
         }
         
         .empty-orders .icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            width: 80px;
+            height: 80px;
+            color: #ccc;
+            margin: 0 auto 1rem;
         }
         
         .empty-orders h3 {
@@ -317,10 +320,43 @@ $pageTitle = 'My Orders';
                 <div class="profile-email"><?php echo cleanOutput($user['email']); ?></div>
                 
                 <ul class="profile-menu">
-                    <li><a href="profile.php"><span class="icon">👤</span> Profile</a></li>
-                    <li><a href="orders.php" class="active"><span class="icon">📦</span> My Orders</a></li>
-                    <li><a href="wishlist.php"><span class="icon">❤️</span> Wishlist</a></li>
-                    <li><a href="logout.php"><span class="icon">🚪</span> Logout</a></li>
+                    <li>
+                        <a href="profile.php">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="orders.php" class="active">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            My Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="wishlist.php">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            Wishlist
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.php">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Logout
+                        </a>
+                    </li>
                 </ul>
             </aside>
             
@@ -330,7 +366,11 @@ $pageTitle = 'My Orders';
                 
                 <?php if (empty($orders)): ?>
                     <div class="empty-orders">
-                        <div class="icon">📦</div>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 80px; height: 80px; color: #ccc; margin: 0 auto 1rem;">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
                         <h3>No orders yet</h3>
                         <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
                         <a href="products.php" class="btn btn-primary">Start Shopping</a>
@@ -347,14 +387,14 @@ $pageTitle = 'My Orders';
                                     <span class="order-status status-<?php echo $order['status']; ?>">
                                         <?php 
                                         $statusIcons = [
-                                            'pending' => '⏳',
-                                            'confirmed' => '✅',
-                                            'processing' => '🔧',
-                                            'shipped' => '🚚',
-                                            'delivered' => '📬',
-                                            'cancelled' => '❌'
+                                            'pending' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+                                            'confirmed' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+                                            'processing' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l-4.2-4.2"></path></svg>',
+                                            'shipped' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>',
+                                            'delivered' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+                                            'cancelled' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'
                                         ];
-                                        echo ($statusIcons[$order['status']] ?? '📦') . ' ';
+                                        echo ($statusIcons[$order['status']] ?? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path></svg>') . ' ';
                                         echo ucfirst($order['status']);
                                         ?>
                                     </span>

@@ -205,7 +205,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                             ?>
                                 <div class="gallery-image">
                                     <img src="assets/images/products/<?php echo cleanOutput($image['image_path']); ?>" 
-                                         alt="<?php echo cleanOutput($product['name']); ?> - View <?php echo $i + 1; ?>">
+                                         alt="<?php echo cleanOutput($product['name']); ?> - View <?php echo $i + 1; ?>"
+                                         loading="lazy">
                                 </div>
                             <?php endfor; ?>
                         </div>
@@ -267,10 +268,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 </span>
                             <?php endif; ?>
                         </div>
-                    </div>
-                    
-                    <div class="product-description">
-                        <p><?php echo nl2br(cleanOutput($product['description'])); ?></p>
                     </div>
                     
                     <div class="product-meta" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
@@ -386,6 +383,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     
                     <!-- Product Details -->
                     <div class="product-details-accordion">
+                        <div class="accordion-item active">
+                            <button class="accordion-header">
+                                <span>Description</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </button>
+                            <div class="accordion-content">
+                                <p><?php echo nl2br(cleanOutput($product['description'])); ?></p>
+                            </div>
+                        </div>
+                        
                         <div class="accordion-item">
                             <button class="accordion-header">
                                 <span>Product Details</span>
@@ -425,9 +434,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <?php if (!empty($relatedProducts)): ?>
                 <section class="related-products">
                     <div class="section-separator"></div>
-                    <h2 class="section-title">You May Also Like</h2>
-                    <div class="products-grid">
-                        <?php foreach ($relatedProducts as $related): ?>
+                    <div class="section-header-with-nav">
+                        <h2 class="section-title">You May Also Like</h2>
+                        <div class="carousel-nav-buttons">
+                            <button class="carousel-nav-btn prev-btn" id="relatedPrev" aria-label="Previous products">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M15 18l-6-6 6-6"></path>
+                                </svg>
+                            </button>
+                            <button class="carousel-nav-btn next-btn" id="relatedNext" aria-label="Next products">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 18l6-6-6-6"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="products-carousel-wrapper">
+                        <div class="products-grid products-carousel" id="relatedProductsCarousel">
+                            <?php foreach ($relatedProducts as $related): ?>
                             <article class="product-card">
                                 <a href="product-detail.php?slug=<?php echo $related['slug']; ?>" class="product-link">
                                     <div class="product-image">
@@ -491,6 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 </a>
                             </article>
                         <?php endforeach; ?>
+                        </div>
                     </div>
                 </section>
             <?php endif; ?>
@@ -512,41 +537,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         console.log('Size groups:', sizeGroups);
         console.log('Total variants:', variants.length);
         
-        // If there's only one variant, auto-select it
-        if (variants.length === 1 && variants[0].stock_quantity > 0) {
-            document.addEventListener('DOMContentLoaded', function() {
-                const variantIdInput = document.getElementById('variantId');
-                const addToCartBtn = document.getElementById('addToCartBtn');
-                
-                if (variantIdInput && addToCartBtn) {
-                    variantIdInput.value = variants[0].variant_id;
-                    addToCartBtn.disabled = false;
-                    console.log('Auto-selected single variant:', variants[0].variant_id);
-                    
-                    // Update button text to show it's ready
-                    const helpText = document.querySelector('.product-actions p');
-                    if (helpText) {
-                        helpText.textContent = 'Ready to add to cart!';
-                        helpText.style.color = '#4CAF50';
-                    }
-                }
-            });
-        }
-        
-        // Add click handler to test button state
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartBtn = document.getElementById('addToCartBtn');
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', function(e) {
-                    if (this.disabled) {
-                        e.preventDefault();
-                        alert('Please select a size and color first');
-                        console.log('Button is disabled. Variant ID:', document.getElementById('variantId')?.value);
-                    }
-                });
-            }
-        });
-        
         // Gallery Navigation
         if (typeof allImages !== 'undefined' && allImages.length > 3) {
             let currentSet = 0;
@@ -567,7 +557,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 imagesToShow.forEach((img, index) => {
                     const div = document.createElement('div');
                     div.className = 'gallery-image';
-                    div.innerHTML = `<img src="assets/images/products/${img.path}" alt="${img.alt} - View ${startIndex + index + 1}">`;
+                    div.innerHTML = `<img src="assets/images/products/${img.path}" alt="${img.alt} - View ${startIndex + index + 1}" loading="lazy">`;
                     gallery.appendChild(div);
                 });
                 
@@ -594,21 +584,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             updateGallery();
         }
         
-        // Accordion functionality
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', function() {
-                const item = this.parentElement;
-                const isActive = item.classList.contains('active');
-                
-                // Close all accordions
-                document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
-                
-                // Open clicked accordion if it wasn't active
-                if (!isActive) {
-                    item.classList.add('active');
-                }
+        // Related Products Carousel
+        const relatedCarousel = document.getElementById('relatedProductsCarousel');
+        const relatedPrev = document.getElementById('relatedPrev');
+        const relatedNext = document.getElementById('relatedNext');
+        
+        if (relatedCarousel && relatedPrev && relatedNext) {
+            const cardWidth = 280; // Approximate card width + gap
+            
+            relatedNext.addEventListener('click', () => {
+                relatedCarousel.scrollBy({ left: cardWidth * 2, behavior: 'smooth' });
             });
-        });
+            
+            relatedPrev.addEventListener('click', () => {
+                relatedCarousel.scrollBy({ left: -cardWidth * 2, behavior: 'smooth' });
+            });
+            
+            // Update button states on scroll
+            relatedCarousel.addEventListener('scroll', () => {
+                relatedPrev.disabled = relatedCarousel.scrollLeft <= 0;
+                relatedNext.disabled = relatedCarousel.scrollLeft >= relatedCarousel.scrollWidth - relatedCarousel.clientWidth - 10;
+            });
+            
+            // Initial state
+            relatedPrev.disabled = true;
+            relatedNext.disabled = relatedCarousel.scrollWidth <= relatedCarousel.clientWidth;
+        }
     </script>
     <script src="assets/js/product.js"></script>
     <script src="assets/js/main.js"></script>

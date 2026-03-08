@@ -387,6 +387,20 @@ $flash = getFlashMessage();
          * Handles all user-related actions via AJAX
          */
         
+        // Lazy load images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', function() {
+                        this.classList.add('loaded');
+                    });
+                }
+            });
+        });
+        
         let currentUserId = null;
         
         /**

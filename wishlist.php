@@ -367,7 +367,9 @@ $flash = getFlashMessage();
                             <div class="wishlist-item">
                                 <div class="wishlist-image">
                                     <?php if ($item['primary_image']): ?>
-                                        <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" alt="<?php echo cleanOutput($item['name']); ?>">
+                                        <img src="assets/images/products/<?php echo cleanOutput($item['primary_image']); ?>" 
+                                             alt="<?php echo cleanOutput($item['name']); ?>"
+                                             loading="lazy">
                                     <?php else: ?>
                                         <?php echo $emoji; ?>
                                     <?php endif; ?>

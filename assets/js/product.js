@@ -49,18 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 colorBtn.dataset.price = variant.price_adjustment;
                 colorBtn.dataset.stock = variant.stock_quantity;
                 colorBtn.dataset.color = variant.color;
-                
-                // Color swatch
-                const swatch = document.createElement('span');
-                swatch.className = 'color-swatch';
-                swatch.style.backgroundColor = variant.color_hex || '#ccc';
-                colorBtn.appendChild(swatch);
-                
-                // Color name
-                const name = document.createElement('span');
-                name.className = 'color-name';
-                name.textContent = variant.color;
-                colorBtn.appendChild(name);
+                colorBtn.style.backgroundColor = variant.color_hex || '#ccc';
+                colorBtn.title = variant.color;
                 
                 colorBtn.addEventListener('click', () => selectColor(variant, colorBtn));
                 colorOptions.appendChild(colorBtn);
@@ -157,28 +147,52 @@ document.addEventListener('DOMContentLoaded', function() {
     // =====================================================
     
     const addToCartForm = document.getElementById('addToCartForm');
+    let isSubmitting = false; // Prevent double submission
     
     if (addToCartForm) {
         addToCartForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            if (!selectedVariant) {
-                alert('Please select a size and color');
+            // Prevent double submission
+            if (isSubmitting) {
+                console.log('Already submitting, ignoring duplicate request');
+                return;
+            }
+            
+            console.log('Form submitted');
+            console.log('Selected variant:', selectedVariant);
+            console.log('Variant ID input:', variantIdInput?.value);
+            
+            // Strict validation - must have both size and color selected
+            if (!selectedSize) {
+                showToast('Size Required', 'Please select a size first', 'warning');
+                return;
+            }
+            
+            if (!selectedVariant || !variantIdInput?.value) {
+                showToast('Color Required', 'Please select a color', 'warning');
                 return;
             }
             
             const formData = new FormData(this);
             
+            console.log('Form data:', Object.fromEntries(formData));
+            
             try {
+                isSubmitting = true;
                 addToCartBtn.disabled = true;
-                addToCartBtn.innerHTML = '<span class="spinner"></span> Adding...';
+                addToCartBtn.innerHTML = '<span>Adding...</span>';
                 
                 const response = await fetch(window.location.href, {
                     method: 'POST',
                     body: formData
                 });
                 
+                console.log('Response status:', response.status);
+                
                 const data = await response.json();
+                
+                console.log('Response data:', data);
                 
                 if (data.success) {
                     // Update cart badge
@@ -188,24 +202,31 @@ document.addEventListener('DOMContentLoaded', function() {
                         cartBadge.style.display = 'flex';
                     }
                     
-                    // Show success message
-                    showNotification('Item added to cart!', 'success');
+                    // Show success toast
+                    showToast('Added to Cart!', 'Item added to cart', 'success');
                     
-                    // Reset button
-                    addToCartBtn.disabled = false;
-                    addToCartBtn.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                        </svg>
-                        Add to Cart
-                    `;
+                    // Reset quantity
+                    document.getElementById('quantity').value = 1;
+                    
+                    // Reset button after short delay
+                    setTimeout(() => {
+                        isSubmitting = false;
+                        addToCartBtn.disabled = false;
+                        addToCartBtn.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            Add to Cart
+                        `;
+                    }, 1000);
                 } else {
-                    showNotification(data.message || 'Failed to add item', 'error');
+                    showToast('Error', data.message || 'Failed to add item', 'error');
+                    isSubmitting = false;
                     addToCartBtn.disabled = false;
                     addToCartBtn.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -215,10 +236,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showNotification('An error occurred. Please try again.', 'error');
+                showToast('Error', 'An error occurred. Please try again.', 'error');
+                isSubmitting = false;
                 addToCartBtn.disabled = false;
                 addToCartBtn.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -227,35 +249,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
             }
         });
-    }
-    
-    // =====================================================
-    // NOTIFICATION
-    // =====================================================
-    
-    /**
-     * Show notification toast
-     * @param {string} message - Message to display
-     * @param {string} type - Notification type (success, error, warning)
-     */
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <span>${message}</span>
-            <button onclick="this.parentElement.remove()">&times;</button>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => notification.classList.add('show'), 10);
-        
-        // Auto dismiss
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
     }
     
 });

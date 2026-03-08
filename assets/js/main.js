@@ -7,6 +7,110 @@
  * @version 1.0
  */
 
+// =====================================================
+// TOAST NOTIFICATION SYSTEM (Global)
+// =====================================================
+
+window.showToast = function(title, message, type = 'success', duration = 3000) {
+    // Create toast container if it doesn't exist
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    // Icon based on type
+    const icons = {
+        success: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>',
+        error: '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>',
+        warning: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>',
+        info: '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>'
+    };
+    
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                ${icons[type]}
+            </svg>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Auto remove after duration
+    if (duration > 0) {
+        setTimeout(() => {
+            toast.classList.add('removing');
+            setTimeout(() => {
+                toast.remove();
+                // Remove container if empty
+                if (container.children.length === 0) {
+                    container.remove();
+                }
+            }, 300);
+        }, duration);
+    }
+    
+    return toast;
+};
+
+// =====================================================
+// CUSTOM CONFIRMATION DIALOG (Global)
+// =====================================================
+
+window.showConfirm = function(message, title = 'localhost says') {
+    return new Promise((resolve) => {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'confirm-overlay';
+        
+        // Create dialog
+        overlay.innerHTML = `
+            <div class="confirm-dialog">
+                <div class="confirm-header">${title}</div>
+                <div class="confirm-message">${message}</div>
+                <div class="confirm-actions">
+                    <button class="confirm-btn confirm-btn-secondary" data-action="cancel">Cancel</button>
+                    <button class="confirm-btn confirm-btn-primary" data-action="ok">OK</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        // Handle button clicks
+        overlay.addEventListener('click', function(e) {
+            if (e.target.dataset.action === 'ok') {
+                resolve(true);
+                overlay.remove();
+            } else if (e.target.dataset.action === 'cancel' || e.target === overlay) {
+                resolve(false);
+                overlay.remove();
+            }
+        });
+        
+        // Focus OK button
+        setTimeout(() => {
+            overlay.querySelector('[data-action="ok"]').focus();
+        }, 100);
+    });
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     
     // =====================================================
@@ -216,6 +320,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     // If IntersectionObserver is not supported, cards remain visible (no lazy-load class added)
+    
+    // =====================================================
+    // LAZY LOADING IMAGE ANIMATION
+    // =====================================================
+    
+    // Function to handle image loading with fade-in animation
+    function handleImageLoad(img) {
+        if (img.complete) {
+            img.classList.add('loaded');
+        } else {
+            img.addEventListener('load', function() {
+                img.classList.add('loaded');
+            });
+        }
+    }
+    
+    // Get all lazy loading images
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    
+    // Check if browser supports Intersection Observer
+    if ('IntersectionObserver' in window) {
+        // Create intersection observer for smooth animations
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    handleImageLoad(img);
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px' // Start loading 50px before image enters viewport
+        });
+        
+        // Observe all lazy images
+        lazyImages.forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // Fallback for browsers without Intersection Observer
+        lazyImages.forEach(img => {
+            handleImageLoad(img);
+        });
+    }
+    
+    // Handle dynamically added images (for product galleries, etc.)
+    const observeDynamicImages = () => {
+        const newLazyImages = document.querySelectorAll('img[loading="lazy"]:not(.loaded):not(.observed)');
+        newLazyImages.forEach(img => {
+            img.classList.add('observed');
+            handleImageLoad(img);
+        });
+    };
+    
+    // Watch for DOM changes to catch dynamically added images
+    const mutationObserver = new MutationObserver(observeDynamicImages);
+    mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
     
 });
 
