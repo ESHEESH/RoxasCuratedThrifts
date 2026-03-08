@@ -349,10 +349,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                             </svg>
                                             Add to Cart
                                         </button>
-                                        <a href="<?php echo $inWishlist ? 'wishlist.php?remove=' . $wishlistId : 'wishlist-add.php?product_id=' . $product['product_id']; ?>" 
+                                        <a href="<?php echo $inWishlist ? 'wishlist-add.php?product_id=' . $product['product_id'] . '&action=remove' : 'wishlist-add.php?product_id=' . $product['product_id']; ?>" 
                                            class="btn btn-outline btn-lg wishlist-btn-large <?php echo $inWishlist ? 'active' : ''; ?>" 
                                            style="padding: 0.75rem 1rem;"
-                                           title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>">
+                                           title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>"
+                                           data-product-id="<?php echo $product['product_id']; ?>">
                                             <svg viewBox="0 0 24 24" fill="<?php echo $inWishlist ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                                                 <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
                                             </svg>
@@ -487,9 +488,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                                 $inWishlist = fetchOne("SELECT wishlist_id FROM wishlist WHERE user_id = ? AND product_id = ?", 
                                                     [$userId, $related['product_id']]);
                                                 ?>
-                                                <a href="<?php echo $inWishlist ? 'wishlist.php?remove=' . $inWishlist['wishlist_id'] : 'wishlist-add.php?product_id=' . $related['product_id']; ?>" 
+                                                <a href="<?php echo $inWishlist ? 'wishlist-add.php?product_id=' . $related['product_id'] . '&action=remove' : 'wishlist-add.php?product_id=' . $related['product_id']; ?>" 
                                                    class="wishlist-btn <?php echo $inWishlist ? 'active' : ''; ?>" 
-                                                   title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>">
+                                                   title="<?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>"
+                                                   data-product-id="<?php echo $related['product_id']; ?>">
                                                     <svg viewBox="0 0 24 24" fill="<?php echo $inWishlist ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="2">
                                                         <path d="M3 9.348C3 6.388 5.437 4 8.402 4a5.42 5.42 0 0 1 3.602 1.362A5.412 5.412 0 0 1 15.598 4c2.971 0 5.41 2.386 5.402 5.35a5.296 5.296 0 0 1-1.614 3.817l-.002.001-7.38 7.232-7.42-7.27A5.24 5.24 0 0 1 3 9.348Z"></path>
                                                     </svg>

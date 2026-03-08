@@ -25,16 +25,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Parse the URL to get parameters
         let url = new URL(href, window.location.origin + window.location.pathname);
-        const productId = url.searchParams.get('product_id');
+        let productId = url.searchParams.get('product_id');
         const removeId = url.searchParams.get('remove');
+        
+        // Fallback to data attribute if product_id not in URL
+        if (!productId && !removeId) {
+            productId = wishlistBtn.getAttribute('data-product-id');
+        }
         
         if (!productId && !removeId) {
             console.error('No product ID or wishlist ID found');
+            console.error('href:', href);
+            console.error('data-product-id:', wishlistBtn.getAttribute('data-product-id'));
             return;
         }
         
         // Determine action and ID
-        const action = removeId ? 'remove' : 'add';
+        const action = url.searchParams.get('action') || (removeId ? 'remove' : 'add');
         const requestProductId = productId || removeId;
         
         // Disable button during request
@@ -42,15 +49,32 @@ document.addEventListener('DOMContentLoaded', function() {
         wishlistBtn.style.opacity = '0.6';
         
         // Determine the correct path to wishlist-add.php based on current location
-        let basePath = '';
-        if (window.location.pathname.includes('/shop/')) {
-            basePath = '';
+        let apiPath = '';
+        const currentPath = window.location.pathname;
+        
+        // Get the base URL from the current location
+        const pathParts = currentPath.split('/');
+        const baseIndex = pathParts.indexOf('thrift-store');
+        
+        if (baseIndex !== -1) {
+            // Construct absolute path
+            const basePath = pathParts.slice(0, baseIndex + 1).join('/');
+            apiPath = `${basePath}/shop/wishlist-add.php`;
         } else {
-            basePath = 'shop/';
+            // Fallback to relative path
+            if (currentPath.includes('/shop/')) {
+                apiPath = 'wishlist-add.php';
+            } else {
+                apiPath = 'shop/wishlist-add.php';
+            }
         }
         
         // Make AJAX request
-        fetch(`${basePath}wishlist-add.php?product_id=${requestProductId}&action=${action}`, {
+        const requestUrl = `${apiPath}?product_id=${requestProductId}&action=${action}`;
+        console.log('Wishlist request URL:', requestUrl); // Debug log
+        console.log('Product ID:', requestProductId, 'Action:', action); // Debug log
+        
+        fetch(requestUrl, {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -58,6 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Wishlist response:', data); // Debug log
+            
             if (data.success) {
                 // Show toast notification
                 window.showToast(
@@ -105,12 +131,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 1000);
                 }
             } else {
-                window.showToast('Error', data.message, 'error');
+                console.error('Wishlist error response:', data); // Debug log
+                window.showToast('Error', data.message + (data.debug ? ' (Check console)' : ''), 'error');
             }
         })
         .catch(error => {
-            console.error('Wishlist error:', error);
-            window.showToast('Error', 'Failed to update wishlist', 'error');
+            console.error('Wishlist fetch error:', error);
+            window.showToast('Error', 'Failed to update wishlist. Check console for details.', 'error');
         })
         .finally(() => {
             // Re-enable button

@@ -38,15 +38,35 @@ if ($productId <= 0) {
 }
 
 // Check if product exists
-$product = fetchOne("SELECT product_id, name FROM products WHERE product_id = ? AND is_active = TRUE", [$productId]);
+$product = fetchOne("SELECT product_id, name, is_active FROM products WHERE product_id = ?", [$productId]);
 
 if (!$product) {
     if ($isAjax) {
         header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Product not found']);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Product not found in database',
+            'debug' => ['product_id' => $productId]
+        ]);
         exit();
     }
     setFlashMessage('error', 'Product not found.');
+    header("Location: ../shop/products.php");
+    exit();
+}
+
+// Check if product is active
+if ($product['is_active'] != 1) {
+    if ($isAjax) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false, 
+            'message' => 'This product is no longer available',
+            'debug' => ['product_id' => $productId, 'is_active' => $product['is_active']]
+        ]);
+        exit();
+    }
+    setFlashMessage('error', 'This product is no longer available.');
     header("Location: ../shop/products.php");
     exit();
 }
