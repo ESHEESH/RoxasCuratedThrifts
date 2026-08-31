@@ -46,33 +46,29 @@ A clean, secure, and feature-rich e-commerce platform for curated thrifted cloth
 ### Setup Steps
 
 1. **Clone/Extract the project** to your XAMPP htdocs folder:
-   ```
-   C:\xampp\htdocs\thrift-store
-   ```
-
 2. **Create the database**:
-   - Open phpMyAdmin (http://localhost/phpmyadmin)
-   - Create a new database named `thrift_store`
-   - Import the database schema from `database/schema.sql`
+- Open phpMyAdmin (http://localhost/phpmyadmin)
+- Create a new database named `thrift_store`
+- Import the database schema from `database/schema.sql`
 
 3. **Configure database connection**:
-   - Edit `config/database.php` if needed
-   - Default XAMPP credentials:
-     - Host: `localhost`
-     - Username: `root`
-     - Password: `` (empty)
-     - Database: `thrift_store`
+- Edit `config/database.php` if needed
+- Default XAMPP credentials:
+  - Host: `localhost`
+  - Username: `root`
+  - Password: `` (empty)
+  - Database: `thrift_store`
 
 4. **Set up upload directory**:
-   - Create `assets/images/products/` folder
-   - Create `assets/images/uploads/` folder
-   - Ensure PHP has write permissions
+- Create `assets/images/products/` folder
+- Create `assets/images/uploads/` folder
+- Ensure PHP has write permissions
 
 5. **Access the website**:
-   - User site: http://localhost/thrift-store
-   - Admin panel: http://localhost/thrift-store/admin
-   - Login: http://localhost/thrift-store/auth/login.php
-   - Shop: http://localhost/thrift-store/shop/products.php
+- User site: http://localhost/thrift-store
+- Admin panel: http://localhost/thrift-store/admin
+- Login: http://localhost/thrift-store/auth/login.php
+- Shop: http://localhost/thrift-store/shop/products.php
 
 ### Default Admin Account
 - **Username**: `admin`
@@ -82,186 +78,70 @@ A clean, secure, and feature-rich e-commerce platform for curated thrifted cloth
 
 ## Project Structure
 
-```
 thrift-store/
-├── admin/                # Admin panel
-│   ├── includes/         # Admin components
-│   └── *.php             # Admin pages
-├── assets/               # Static assets
-│   ├── css/              # Stylesheets
-│   │   ├── main.css      # Main styles
-│   │   ├── auth.css      # Authentication styles
-│   │   ├── admin.css     # Admin panel styles
+├── admin/                 # Admin panel
+│   ├── includes/          # Admin components
+│   └── *.php              # Admin pages
+├── assets/                # Static assets
+│   ├── css/               # Stylesheets
+│   │   ├── main.css       # Main styles
+│   │   ├── auth.css       # Authentication styles
+│   │   ├── admin.css      # Admin panel styles
 │   │   └── responsive.css # Responsive design
-│   ├── js/               # JavaScript files
-│   │   ├── main.js       # Main functionality
-│   │   ├── auth.js       # Authentication
-│   │   ├── product.js    # Product page
-│   │   ├── cart.js       # Shopping cart
-│   │   └── admin.js      # Admin functionality
-│   └── images/           # Image assets
-│       ├── products/     # Product images
-│       └── uploads/      # User uploads
-├── auth/                 # Authentication pages
-│   ├── login.php         # User login
-│   ├── register.php      # User registration
-│   ├── logout.php        # Logout handler
+│   ├── js/                # JavaScript files
+│   │   ├── main.js        # Main functionality
+│   │   ├── auth.js        # Authentication
+│   │   ├── product.js     # Product page
+│   │   ├── cart.js        # Shopping cart
+│   │   └── admin.js       # Admin functionality
+│   └── images/            # Image assets
+│       ├── products/      # Product images
+│       └── uploads/       # User uploads
+├── auth/                  # Authentication pages
+│   ├── login.php          # User login
+│   ├── register.php       # User registration
+│   ├── logout.php         # Logout handler
 │   ├── forgot-password.php # Password recovery
 │   └── reset-password.php  # Password reset
-├── config/               # Configuration files
-│   └── database.php      # Database connection
-├── database/             # Database files
-│   └── schema.sql        # Database schema
-├── documents/            # Documentation
+├── config/                # Configuration files
+│   └── database.php       # Database connection
+├── database/              # Database files
+│   └── schema.sql         # Database schema
+├── documents/             # Documentation
 │   ├── SYSTEM_DOCUMENTATION.md
 │   ├── ERD_MERMAID.md
 │   ├── ERD_QUICK_GUIDE.md
 │   ├── LAZY_LOADING_ANIMATION.md
 │   └── PERFORMANCE_OPTIMIZATION.md
-├── includes/             # Reusable PHP components
-│   ├── header.php        # Site header
-│   ├── footer.php        # Site footer
-│   └── functions.php     # Helper functions
-├── shop/                 # Shopping pages
-│   ├── products.php      # Product listing
+├── includes/              # Reusable PHP components
+│   ├── header.php         # Site header
+│   ├── footer.php         # Site footer
+│   └── functions.php      # Helper functions
+├── shop/                  # Shopping pages
+│   ├── products.php       # Product listing
 │   ├── product-detail.php # Single product view
-│   ├── cart.php          # Shopping cart
-│   ├── checkout.php      # Checkout page
-│   ├── wishlist.php      # User wishlist
-│   └── wishlist-add.php  # Add to wishlist handler
-├── user/                 # User account pages
-│   ├── profile.php       # User profile
-│   ├── orders.php        # Order history
+│   ├── cart.php           # Shopping cart
+│   ├── checkout.php       # Checkout page
+│   ├── wishlist.php       # User wishlist
+│   └── wishlist-add.php   # Add to wishlist handler
+├── user/                  # User account pages
+│   ├── profile.php        # User profile
+│   ├── orders.php         # Order history
 │   └── order-confirmation.php # Order confirmation
-├── index.php             # Landing page
-├── about.php             # About page
-├── contact.php           # Contact page
-├── faq.php               # FAQ page
-├── privacy.php           # Privacy policy
-├── terms.php             # Terms of service
-├── size-guide.php        # Size guide
-├── shipping-info.php     # Shipping information
+├── index.php              # Landing page
+├── about.php              # About page
+├── contact.php            # Contact page
+├── faq.php                # FAQ page
+├── privacy.php            # Privacy policy
+├── terms.php              # Terms of service
+├── size-guide.php         # Size guide
+├── shipping-info.php      # Shipping information
 ├── returns-exchanges.php # Returns & exchanges
-├── .htaccess             # Apache configuration
-└── README.md             # This file
-```
-
-## Database Schema
-
-### Core Tables
-- **users** - Customer accounts
-- **admins** - Admin accounts (separate from users)
-- **products** - Product information
-- **product_variants** - Size/color variations with pricing
-- **categories** - Product categories
-- **cart** - Shopping cart items
-- **orders** - Order information
-- **order_items** - Individual order items
-- **shipping_rates** - Shipping fees by continent
-- **transactions** - Payment transaction logs
-- **login_attempts** - Failed login tracking (security)
-- **activity_logs** - Admin activity tracking
-
-## Security Measures
-
-### Implemented Protections
-1. **SQL Injection**: All queries use prepared statements with parameter binding
-2. **XSS Attacks**: Input sanitization with `htmlspecialchars()` and `strip_tags()`
-3. **CSRF Attacks**: Token validation on all forms
-4. **Password Security**: Bcrypt hashing with cost factor 12
-5. **Rate Limiting**: 5 login attempts per 15 minutes
-6. **Session Security**: Secure session handling with regeneration
-7. **File Uploads**: MIME type validation, size limits, unique filenames
-
-### Password Requirements
-- Minimum 8 characters
-- At least one uppercase letter
-- At least one lowercase letter
-- At least one number
-- At least one special character
-
-## Shipping Fees
-
-| Continent | Base Rate |
-|-----------|-----------|
-| Philippines (Asia) | ₱80-170 |
-| Other Asia | ₱350 |
-| North America |  ₱550 |
-| South America |  ₱650 |
-| Europe | ₱500 |
-| Africa | ₱600 |
-| Oceania | ₱600 |
-| Antarctica | ₱1000 |
-
-## Payment Methods
-- GCash
-- Maya
-- Bank Transfer
-- Cash on Delivery (COD)
-
-## Development Notes
-
-### Adding New Products
-1. Login to admin panel
-2. Go to Products → Add Product
-3. Fill in product details
-4. Upload product images
-5. Add variants (sizes/colors) with stock quantities
-
-### Managing Orders
-1. Orders appear in the admin dashboard
-2. Update order status as it progresses
-3. Add tracking numbers for shipped orders
-
-### User Management
-- View all registered users
-- Ban/unban users with reasons
-- Edit user information
-- Delete users (only if no orders exist)
-
-## Customization
-
-### Changing Colors
-Edit CSS variables in `assets/css/main.css`:
-```css
-:root {
+├── .htaccess              # Apache configuration
+└── README.md              # This file
+Database SchemaCore Tablesusers - Customer accountsadmins - Admin accounts (separate from users)products - Product informationproduct_variants - Size/color variations with pricingcategories - Product categoriescart - Shopping cart itemsorders - Order informationorder_items - Individual order itemsshipping_rates - Shipping fees by continenttransactions - Payment transaction logslogin_attempts - Failed login tracking (security)activity_logs - Admin activity trackingSecurity MeasuresImplemented ProtectionsSQL Injection: All queries use prepared statements with parameter bindingXSS Attacks: Input sanitization with htmlspecialchars() and strip_tags()CSRF Attacks: Token validation on all formsPassword Security: Bcrypt hashing with cost factor 12Rate Limiting: 5 login attempts per 15 minutesSession Security: Secure session handling with regenerationFile Uploads: MIME type validation, size limits, unique filenamesPassword RequirementsMinimum 8 charactersAt least one uppercase letterAt least one lowercase letterAt least one numberAt least one special characterShipping FeesContinentBase RatePhilippines (Asia)₱80-170Other Asia₱350North America₱550South America₱650Europe₱500Africa₱600Oceania₱600Antarctica₱1000Payment MethodsGCashMayaBank TransferCash on Delivery (COD)Development NotesAdding New Products  Login to admin panel  Go to Products → Add Product  Fill in product details  Upload product images  Add variants (sizes/colors) with stock quantities  Managing Orders  Orders appear in the admin dashboard  Update order status as it progresses  Add tracking numbers for shipped orders  User Management  View all registered users  Ban/unban users with reasons  Edit user information  Delete users (only if no orders exist)  Customization  Changing Colors  Edit CSS variables in assets/css/main.css:  CSS:root {
     --color-primary: #1a1a1a;
     --color-accent: #ff6b6b;
     /* ... */
 }
-```
-
-### Adding New Categories
-Insert into the `categories` table in the database.
-
-### Modifying Shipping Rates
-Update the `shipping_rates` table in the database.
-
-## Troubleshooting
-
-### Common Issues
-
-**Database connection failed**
-- Check XAMPP is running (Apache and MySQL)
-- Verify database credentials in `config/database.php`
-- Ensure database `thrift_store` exists
-
-**Images not uploading**
-- Check `assets/images/products/` folder exists
-- Verify PHP has write permissions
-- Check `upload_max_filesize` in php.ini
-
-**Session issues**
-- Clear browser cookies
-- Check PHP session configuration
-
-## License
-
-This project is for educational purposes.
-
-## Credits
-
-Developed for a curated thrift store e-commerce platform.
-#   R o x a s C u r a t e d T h r i f t s 
- 
- 
+Adding New Categories  Insert into the categories table in the database.  Modifying Shipping Rates  Update the shipping_rates table in the database.  Troubleshooting  Common Issues  Database connection failed  Check XAMPP is running (Apache and MySQL)  Verify database credentials in config/database.phpEnsure database thrift_store exists  Images not uploading  Check assets/images/products/ folder exists  Verify PHP has write permissions  Check upload_max_filesize in php.ini  Session issues  Clear browser cookies  Check PHP session configuration  License  This project is for educational purposes.  Credits  Developed for a curated thrift store e-commerce platform.  
